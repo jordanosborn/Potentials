@@ -1,15 +1,12 @@
+using Microsoft.Xna.Framework;
 namespace Potential
 {
 
-    public class Field : GameObject
+    public interface Field : GameObject
     {
-        public Utilities.ErrorCodes Update(World world)
-        {
-            return Utilities.ErrorCodes.SUCCESS;
-        }
-        public Utilities.ErrorCodes Draw(object window)
-        {
-            return Utilities.ErrorCodes.SUCCESS;
-        }
+        float ValueAt(Vector3 position);
+        float ValueFor(Particle p);
+        Vector3 ForceAt(Vector3 position);
+        Vector3 ForceFor(Particle p);
     }
 }
