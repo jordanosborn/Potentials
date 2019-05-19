@@ -15,7 +15,7 @@ namespace Potential
         {
             orientation.Normalize();
             var dq = orientation * h;
-            var df = (-f.ValueAt(position + 2 * dq) + 8 * f.ValueAt(position + dq) - 8 * f.ValueAt(position - dq) + f.ValueAt(position - 2 * dq)) / (12 * h);
+            var df = (-f.Value(position + 2 * dq) + 8 * f.Value(position + dq) - 8 * f.Value(position - dq) + f.Value(position - 2 * dq)) / (12 * h);
             return df * orientation;
         }
         public static Vector3 Derivative3(Field f, Vector3 position, float h = 0.001f)

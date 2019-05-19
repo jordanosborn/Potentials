@@ -8,12 +8,21 @@ namespace Potential
         public bool IsFixed { get; private set; }
         public Vector3 Position { get; private set; }
         public Vector3 Velocity { get; private set; }
-        Particle((float, float, float) position, (float, float, float) velocity, float charge = 0, float mass = 0, bool isfixed = false)
+        Particle((float, float, float) position, (float, float, float) velocity, float mass = 0, float charge = 0, bool isfixed = false)
         {
             var (x, y, z) = position;
             var (vx, vy, vz) = velocity;
             Position = new Vector3(x, y, z);
             Velocity = new Vector3(vx, vy, vz);
+            Mass = mass;
+            Charge = charge;
+            IsFixed = isfixed;
+
+        }
+        Particle(Vector3 position, Vector3 velocity, float mass = 0, float charge = 0, bool isfixed = false)
+        {
+            Position = position;
+            Velocity = velocity;
             Charge = charge;
             Mass = mass;
             IsFixed = isfixed;
