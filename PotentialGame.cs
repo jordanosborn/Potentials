@@ -5,7 +5,7 @@ using System;
 
 namespace Potential
 {
-    public class Game1 : Game
+    public class PotentialGame : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -18,7 +18,7 @@ namespace Potential
             graphics.ApplyChanges();
         }
 
-        public Game1()
+        public PotentialGame()
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 600;
