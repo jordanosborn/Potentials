@@ -60,7 +60,6 @@ namespace Potential
         }
         public Utilities.ErrorCodes Draw(SpriteBatch batch)
         {
-            batch.Begin();
             foreach (var p in Particles)
             {
                 p.Draw(batch);
@@ -69,7 +68,6 @@ namespace Potential
             {
                 f.Draw(batch);
             }
-            batch.End();
             return Utilities.ErrorCodes.SUCCESS;
         }
         public object Clone()

@@ -64,12 +64,18 @@ namespace Potential
             base.Update(gameTime);
         }
 
+        protected void DrawUI(GameTime gameTime)
+        {
+            //FPS counter
+            spriteBatch.DrawString(Font, $"{System.Math.Round(FPS.Framerate, 1)} fps", FPS.Position, Color.Black);
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
-            GameWorld.Draw(spriteBatch);
             spriteBatch.Begin();
-            spriteBatch.DrawString(Font, $"{System.Math.Round(FPS.Framerate, 1)} fps", FPS.Position, Color.Black);
+            GameWorld.Draw(spriteBatch);
+            DrawUI(gameTime);
             spriteBatch.End();
             base.Draw(gameTime);
         }
