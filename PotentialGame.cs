@@ -32,33 +32,31 @@ namespace Potential
             Window.Title = "Potential";
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += HandleResizeEvent;
-            Textures = new Dictionary<string, Texture2D>();
-            Textures["moon"] = Content.Load<Texture2D>("moon");
-            Textures["blackhole"] = Content.Load<Texture2D>("blackhole");
-            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(0, 0, 0), new Vector3(0, 0, 0), 50));
-            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 300, 0), new Vector3(0, 0, 0), 50, angular_velocity: -0.8f));
-
+            LoadContent();
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(0, 0, 0), new Vector3(0, 0, 0), 50));
+            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 300, 0), new Vector3(0, 0, 0), 50, angular_velocity: -0.8f));
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            Textures = new Dictionary<string, Texture2D>();
+            Textures["moon"] = Content.Load<Texture2D>("moon");
+            Textures["blackhole"] = Content.Load<Texture2D>("blackhole");
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            GameWorld.Update(gameTime, GameWorld, null);
+            World newWorld = (World)GameWorld.Clone();
+            newWorld.Update(gameTime, GameWorld);
+            GameWorld = newWorld;
             base.Update(gameTime);
         }
 

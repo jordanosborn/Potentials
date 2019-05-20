@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 namespace Potential
 {
-    public class World : GameObject
+    public class World : GameObject, ICloneable
     {
         private List<Field> IntrinsicFields { get; set; }
         private List<Particle> Particles { get; set; }
@@ -69,6 +70,13 @@ namespace Potential
             }
             batch.End();
             return Utilities.ErrorCodes.SUCCESS;
+        }
+        public object Clone()
+        {
+            var world = new World();
+            world.Particles = (List<Particle>)Particles.Clone();
+            world.IntrinsicFields = (List<Field>)IntrinsicFields.Clone();
+            return world;
         }
     }
 }

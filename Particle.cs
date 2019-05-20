@@ -45,5 +45,11 @@ namespace Potential
             }
             return Utilities.ErrorCodes.SUCCESS;
         }
+
+        public object Clone()
+        {
+            var p = new Particle(Texture, Position, Velocity, Radius, Mass, Charge, Rotation, AngularVelocity, IsFixed);
+            return p;
+        }
     }
 }

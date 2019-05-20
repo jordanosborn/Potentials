@@ -45,6 +45,11 @@ namespace Potential
         {
             return Utilities.ErrorCodes.SUCCESS;
         }
+
+        public object Clone()
+        {
+            return new UniqueField();
+        }
     }
 
     public class CombinedField : Field
@@ -52,6 +57,7 @@ namespace Potential
         private Func<float, Field, Particle, float> CombinatorParticle { get; set; }
         private Func<float, Field, Vector3, float> CombinatorPosition { get; set; }
         private readonly Field[] F;
+        private readonly CombineBy C;
         CombinedField(Field f, Field g, CombineBy c)
         {
             CombinatorParticle = CombinedField.CombineFunction<Particle>(c);
@@ -59,6 +65,7 @@ namespace Potential
             F = new Field[2];
             F[0] = f;
             F[1] = g;
+            C = c;
         }
 
         private static Func<float, Field, T, float> CombineFunction<T>(CombineBy c) where T : Particle
@@ -139,6 +146,10 @@ namespace Potential
         public Utilities.ErrorCodes Draw(SpriteBatch batch)
         {
             return Utilities.ErrorCodes.SUCCESS;
+        }
+        public object Clone()
+        {
+            return new CombinedField(F, C);
         }
     }
 }

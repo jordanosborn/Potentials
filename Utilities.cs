@@ -1,4 +1,7 @@
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 namespace Potential
 {
     public static class Utilities
@@ -28,5 +31,12 @@ namespace Potential
             var dfz = Derivative(f, position, dz, h);
             return dfx + dfy + dfz;
         }
+    }
+}
+static class Extensions
+{
+    public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
+    {
+        return listToClone.Select(item => (T)item.Clone()).ToList();
     }
 }
