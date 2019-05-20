@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 namespace Potential
 {
-    public class World
+    public class World : GameObject
     {
         private List<Field> IntrinsicFields { get; set; }
         private List<Particle> Particles { get; set; }
-        World()
+        public World()
         {
             IntrinsicFields = new List<Field>();
             Particles = new List<Particle>();
@@ -14,8 +17,9 @@ namespace Potential
         {
             IntrinsicFields.Add(f);
         }
-        public void AddParticle(Particle p)
+        public void AddParticle(Particle p, Texture2D ParticleTexture)
         {
+            p.Texture = ParticleTexture;
             Particles.Add(p);
         }
 
@@ -38,6 +42,34 @@ namespace Potential
                 return field;
             }
             return null;
+        }
+
+        public Utilities.ErrorCodes Update(World world = null)
+        {
+            world = (world == null) ? this : world;
+            foreach (var p in Particles)
+            {
+                p.Update(world);
+            }
+            foreach (var f in IntrinsicFields)
+            {
+                f.Update(world);
+            }
+            return Utilities.ErrorCodes.SUCCESS;
+        }
+        public Utilities.ErrorCodes Draw(SpriteBatch batch)
+        {
+            batch.Begin();
+            foreach (var p in Particles)
+            {
+                p.Draw(batch);
+            }
+            foreach (var f in IntrinsicFields)
+            {
+                f.Draw(batch);
+            }
+            batch.End();
+            return Utilities.ErrorCodes.SUCCESS;
         }
     }
 }

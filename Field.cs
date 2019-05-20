@@ -1,4 +1,6 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System.Linq;
 using System;
 namespace Potential
@@ -39,7 +41,7 @@ namespace Potential
             return Utilities.ErrorCodes.SUCCESS;
         }
 
-        public Utilities.ErrorCodes Draw(object window)
+        public Utilities.ErrorCodes Draw(SpriteBatch batch)
         {
             return Utilities.ErrorCodes.SUCCESS;
         }
@@ -134,7 +136,7 @@ namespace Potential
         {
             return Utilities.ErrorCodes.SUCCESS;
         }
-        public Utilities.ErrorCodes Draw(object window)
+        public Utilities.ErrorCodes Draw(SpriteBatch batch)
         {
             return Utilities.ErrorCodes.SUCCESS;
         }

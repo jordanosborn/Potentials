@@ -7,6 +7,8 @@ namespace Potential
 {
     public class PotentialGame : Game
     {
+        private Texture2D ParticleTexture;
+        private World GameWorld = new World();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private void HandleResizeEvent(Object sender, EventArgs a)
@@ -29,6 +31,8 @@ namespace Potential
             Window.Title = "Potential";
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += HandleResizeEvent;
+            ParticleTexture = Content.Load<Texture2D>("particle");
+            GameWorld.AddParticle(new Particle(new Vector3(0, 0, 0), new Vector3(0, 0, 0)), ParticleTexture);
         }
 
         protected override void Initialize()
@@ -58,8 +62,7 @@ namespace Potential
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
-
-            // TODO: Add your drawing code here
+            GameWorld.Draw(spriteBatch);
             base.Draw(gameTime);
         }
     }
