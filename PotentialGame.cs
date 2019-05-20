@@ -32,7 +32,7 @@ namespace Potential
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += HandleResizeEvent;
             ParticleTexture = Content.Load<Texture2D>("particle");
-            GameWorld.AddParticle(new Particle(new Vector3(0, 0, 0), new Vector3(0, 0, 0)), ParticleTexture);
+            GameWorld.AddParticle(new Particle(new Vector3(0, 0, 0), new Vector3(0, 0, 0), 50), ParticleTexture);
         }
 
         protected override void Initialize()
@@ -53,7 +53,7 @@ namespace Potential
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);

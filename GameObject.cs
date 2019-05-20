@@ -5,7 +5,7 @@ namespace Potential
 {
     public interface GameObject
     {
-        Utilities.ErrorCodes Update(World world = null, GameState state = null);
+        Utilities.ErrorCodes Update(GameTime gameTime, World world = null, GameState state = null);
         Utilities.ErrorCodes Draw(SpriteBatch batch);
     }
 }

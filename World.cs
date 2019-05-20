@@ -20,6 +20,7 @@ namespace Potential
         public void AddParticle(Particle p, Texture2D ParticleTexture)
         {
             p.Texture = ParticleTexture;
+            p.Scale = new Vector2(p.Radius / p.Texture.Width, p.Radius / p.Texture.Height);
             Particles.Add(p);
         }
 
@@ -44,16 +45,16 @@ namespace Potential
             return null;
         }
 
-        public Utilities.ErrorCodes Update(World world = null, GameState state = null)
+        public Utilities.ErrorCodes Update(GameTime time, World world = null, GameState state = null)
         {
             world = (world == null) ? this : world;
             foreach (var p in Particles)
             {
-                p.Update(world, state);
+                p.Update(time, world, state);
             }
             foreach (var f in IntrinsicFields)
             {
-                f.Update(world, state);
+                f.Update(time, world, state);
             }
             return Utilities.ErrorCodes.SUCCESS;
         }
