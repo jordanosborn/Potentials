@@ -12,6 +12,35 @@ namespace Potential
             FAILURE
         }
     }
+    class SmartFramerate
+    {
+        double currentFrametimes;
+        double weight;
+        int numerator;
+        public Vector2 Position { get; set; }
+
+        public double Framerate
+        {
+            get
+            {
+                return (numerator / currentFrametimes);
+            }
+        }
+
+        public SmartFramerate(int oldFrameWeight, (int, int) position)
+        {
+            numerator = oldFrameWeight;
+            weight = (double)oldFrameWeight / ((double)oldFrameWeight - 1d);
+            Position = new Vector2(position.Item1, position.Item2);
+        }
+
+        public void Update(GameTime time)
+        {
+            var timeSinceLastFrame = time.ElapsedGameTime.TotalSeconds;
+            currentFrametimes = currentFrametimes / weight;
+            currentFrametimes += timeSinceLastFrame;
+        }
+    }
     public static class Math
     {
         public static Vector3 Derivative(Field f, Vector3 position, Vector3 orientation, float h = 0.001f)
