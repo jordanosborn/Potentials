@@ -5,9 +5,13 @@ namespace Potential
     public class Particle : GameObject
     {
         public static float MAXSPEED = 10.0f;
-        public static float RelativisticEnergy(float mass, Vector3 velocity)
+        public static float MAXSPEED2 = MAXSPEED * MAXSPEED;
+        public static float RelativisticEnergy(float mass, Vector3 momentum)
         {
-            return (float)(mass * MAXSPEED / System.Math.Sqrt(1.0 - velocity.LengthSquared() / (MAXSPEED * MAXSPEED))); //TODO: plus potential
+            if (mass > 0)
+                return (float)(mass * MAXSPEED2 / System.Math.Sqrt(1.0 - (momentum / mass).LengthSquared() / (MAXSPEED2))); //TODO: plus potential
+            else
+                return momentum.Length() * MAXSPEED;
         }
         public Vector2 Origin { get; set; }
         public Texture2D Texture { get; set; } = null;
@@ -42,13 +46,14 @@ namespace Potential
             Velocity = (vel_scale * velocity);
             if (Mass > 0)
             {
-                Energy = RelativisticEnergy(Mass, Velocity);
+                Momentum = Mass * Velocity;
+                Energy = RelativisticEnergy(Mass, Momentum);
             }
             else
             {
                 Energy = (energy <= 0) ? 1.0f : energy; //TODO: plus potential
+                Momentum = (Energy / MAXSPEED2) * Velocity;
             }
-            Momentum = (Mass > 0) ? Mass * Velocity : (Energy / (MAXSPEED * MAXSPEED)) * Velocity;
         }
         public Utilities.ErrorCodes Draw(SpriteBatch batch)
         {
@@ -66,14 +71,13 @@ namespace Potential
             {
                 Velocity += dt * Force / Mass;
                 Momentum = Mass * Velocity;
-                Energy = RelativisticEnergy(Mass, Velocity);
             }
             else
             {
                 Momentum += dt * Force;
-                Energy = Momentum.Length() * MAXSPEED;
                 Velocity = (Momentum / Momentum.Length()) * MAXSPEED;
             }
+            Energy = RelativisticEnergy(Mass, Momentum);
             Position += dt * Velocity;
         }
         public Utilities.ErrorCodes Update(GameTime time, World world, GameState state)
