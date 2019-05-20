@@ -7,8 +7,9 @@ namespace Potential
         [STAThread]
         static void Main()
         {
+            var gameBehaviour = Microsoft.Xna.Framework.GameRunBehavior.Synchronous;
             using (var game = new PotentialGame())
-                game.Run();
+                game.Run(gameBehaviour);
         }
     }
 }

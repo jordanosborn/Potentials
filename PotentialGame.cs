@@ -39,8 +39,8 @@ namespace Potential
 
         protected override void Initialize()
         {
-            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(100, 100, 0), new Vector3(0, 0, 0), 50));
-            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 300, 0), new Vector3(0, 0, 0), 50, angular_velocity: -0.8f));
+            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(100, 100, 0), new Vector3(10, 0, 0), 50, mass: 0, energy: 5.0f));
+            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 300, 0), new Vector3(0, 0, 0), 50, angular_velocity: -0.8f, isfixed: true));
             base.Initialize();
         }
 
