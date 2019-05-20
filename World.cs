@@ -17,10 +17,8 @@ namespace Potential
         {
             IntrinsicFields.Add(f);
         }
-        public void AddParticle(Particle p, Texture2D ParticleTexture)
+        public void AddParticle(Particle p)
         {
-            p.Texture = ParticleTexture;
-            p.Scale = new Vector2(p.Radius / p.Texture.Width, p.Radius / p.Texture.Height);
             Particles.Add(p);
         }
 

@@ -33,10 +33,10 @@ namespace Potential
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += HandleResizeEvent;
             Textures = new Dictionary<string, Texture2D>();
-            Textures["particle"] = Content.Load<Texture2D>("moon");
+            Textures["moon"] = Content.Load<Texture2D>("moon");
             Textures["blackhole"] = Content.Load<Texture2D>("blackhole");
-            GameWorld.AddParticle(new Particle(new Vector3(0, 0, 0), new Vector3(0, 0, 0), 50), Textures["particle"]);
-            GameWorld.AddParticle(new Particle(new Vector3(300, 300, 0), new Vector3(0, 0, 0), 50, angular_velocity: -0.8f), Textures["blackhole"]);
+            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(0, 0, 0), new Vector3(0, 0, 0), 50));
+            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 300, 0), new Vector3(0, 0, 0), 50, angular_velocity: -0.8f));
 
         }
 
