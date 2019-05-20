@@ -33,11 +33,12 @@ namespace Potential
         {
             if (Texture == null)
                 return Utilities.ErrorCodes.FAILURE;
-            batch.Draw(Texture, new Vector2(Position.X, Position.Y));
+            batch.Draw(Texture, new Vector2(Position.X, Position.Y), Color.White);
             return Utilities.ErrorCodes.SUCCESS;
         }
-        public Utilities.ErrorCodes Update(World world)
+        public Utilities.ErrorCodes Update(World world, GameState state)
         {
+
             return Utilities.ErrorCodes.SUCCESS;
         }
     }

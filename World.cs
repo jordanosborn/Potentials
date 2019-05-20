@@ -44,16 +44,16 @@ namespace Potential
             return null;
         }
 
-        public Utilities.ErrorCodes Update(World world = null)
+        public Utilities.ErrorCodes Update(World world = null, GameState state = null)
         {
             world = (world == null) ? this : world;
             foreach (var p in Particles)
             {
-                p.Update(world);
+                p.Update(world, state);
             }
             foreach (var f in IntrinsicFields)
             {
-                f.Update(world);
+                f.Update(world, state);
             }
             return Utilities.ErrorCodes.SUCCESS;
         }

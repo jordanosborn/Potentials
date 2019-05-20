@@ -36,7 +36,7 @@ namespace Potential
 
             return 0.0f;
         }
-        public Utilities.ErrorCodes Update(World world)
+        public Utilities.ErrorCodes Update(World world = null, GameState state = null)
         {
             return Utilities.ErrorCodes.SUCCESS;
         }
@@ -132,7 +132,7 @@ namespace Potential
             }
             return sum;
         }
-        public Utilities.ErrorCodes Update(World world)
+        public Utilities.ErrorCodes Update(World world = null, GameState state = null)
         {
             return Utilities.ErrorCodes.SUCCESS;
         }
