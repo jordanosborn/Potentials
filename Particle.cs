@@ -11,8 +11,10 @@ namespace Potential
         public float Mass { get; private set; }
         public bool IsFixed { get; private set; }
         public Vector3 Position { get; private set; }
+        public float Rotation { get; private set; }
         public Vector3 Velocity { get; private set; }
-        public Particle((float, float, float) position, (float, float, float) velocity, float radius = 10.0f, float mass = 0, float charge = 0, bool isfixed = false)
+        public float AngularVelocity { get; private set; } = 0.0f;
+        public Particle((float, float, float) position, (float, float, float) velocity, float radius = 10.0f, float mass = 0, float charge = 0, float rotation = 0.0f, float angular_velocity = 0.0f, bool isfixed = false)
         {
             var (x, y, z) = position;
             var (vx, vy, vz) = velocity;
@@ -22,8 +24,10 @@ namespace Potential
             Mass = mass;
             Charge = charge;
             IsFixed = isfixed;
+            AngularVelocity = angular_velocity;
+            Rotation = rotation;
         }
-        public Particle(Vector3 position, Vector3 velocity, float radius = 10.0f, float mass = 0, float charge = 0, bool isfixed = false)
+        public Particle(Vector3 position, Vector3 velocity, float radius = 10.0f, float mass = 0, float charge = 0, float rotation = 0.0f, float angular_velocity = 0.0f, bool isfixed = false)
         {
             Position = position;
             Velocity = velocity;
@@ -31,17 +35,24 @@ namespace Potential
             Mass = mass;
             Charge = charge;
             IsFixed = isfixed;
+            AngularVelocity = angular_velocity;
+            Rotation = rotation;
         }
         public Utilities.ErrorCodes Draw(SpriteBatch batch)
         {
             if (Texture == null)
                 return Utilities.ErrorCodes.FAILURE;
-            batch.Draw(Texture, new Vector2(Position.X, Position.Y), scale: Scale, color: Color.White);
+            var origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+            batch.Draw(Texture, new Vector2(Position.X, Position.Y), scale: Scale, color: Color.White, rotation: Rotation, origin: origin);
             return Utilities.ErrorCodes.SUCCESS;
         }
         public Utilities.ErrorCodes Update(GameTime time, World world, GameState state)
         {
-
+            Rotation += (float)time.ElapsedGameTime.TotalSeconds * AngularVelocity;
+            if (IsFixed)
+            {
+                return Utilities.ErrorCodes.SUCCESS;
+            }
             return Utilities.ErrorCodes.SUCCESS;
         }
     }

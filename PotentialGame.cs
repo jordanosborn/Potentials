@@ -2,12 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace Potential
 {
     public class PotentialGame : Game
     {
-        private Texture2D ParticleTexture;
+        private Dictionary<string, Texture2D> Textures = null;
         private World GameWorld = new World();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -31,8 +32,12 @@ namespace Potential
             Window.Title = "Potential";
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += HandleResizeEvent;
-            ParticleTexture = Content.Load<Texture2D>("particle");
-            GameWorld.AddParticle(new Particle(new Vector3(0, 0, 0), new Vector3(0, 0, 0), 50), ParticleTexture);
+            Textures = new Dictionary<string, Texture2D>();
+            Textures["particle"] = Content.Load<Texture2D>("moon");
+            Textures["blackhole"] = Content.Load<Texture2D>("blackhole");
+            GameWorld.AddParticle(new Particle(new Vector3(0, 0, 0), new Vector3(0, 0, 0), 50), Textures["particle"]);
+            GameWorld.AddParticle(new Particle(new Vector3(300, 300, 0), new Vector3(0, 0, 0), 50, angular_velocity: -0.8f), Textures["blackhole"]);
+
         }
 
         protected override void Initialize()
@@ -53,9 +58,7 @@ namespace Potential
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            // TODO: Add your update logic here
-
+            GameWorld.Update(gameTime, GameWorld, null);
             base.Update(gameTime);
         }
 
