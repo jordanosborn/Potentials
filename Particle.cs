@@ -1,17 +1,17 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
+using System;
 namespace Potential
 {
     public class Particle : GameObject
     {
-        public static float MAXSPEED = 10.0f;
-        public static float MAXSPEED2 = MAXSPEED * MAXSPEED;
         public static float RelativisticEnergy(float mass, Vector3 momentum)
         {
             if (mass > 0)
-                return (float)(mass * MAXSPEED2 / System.Math.Sqrt(1.0 - (momentum / mass).LengthSquared() / (MAXSPEED2))); //TODO: plus potential
+                return (float)(mass * Constants.c2 / System.Math.Sqrt(1.0 - (momentum / mass).LengthSquared() / (Constants.c2))); //TODO: plus potential
             else
-                return momentum.Length() * MAXSPEED;
+                return momentum.Length() * Constants.c;
         }
         public Vector2 Origin { get; set; }
         public Texture2D Texture { get; set; } = null;
@@ -40,9 +40,9 @@ namespace Potential
             Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
             Scale = new Vector2(Radius / Texture.Width, Radius / Texture.Height);
             Force = new Vector3(0, 0, 0);
-            float vel_scale = (Mass > 0) ? velocity.Length() : MAXSPEED;
+            float vel_scale = (Mass > 0) ? velocity.Length() : Constants.c;
             velocity.Normalize();
-            vel_scale = (vel_scale > MAXSPEED) ? MAXSPEED : vel_scale;
+            vel_scale = (vel_scale > Constants.c) ? Constants.c : vel_scale;
             Velocity = (vel_scale * velocity);
             if (Mass > 0)
             {
@@ -52,7 +52,7 @@ namespace Potential
             else
             {
                 Energy = (energy <= 0) ? 1.0f : energy; //TODO: plus potential
-                Momentum = (Energy / MAXSPEED2) * Velocity;
+                Momentum = (Energy / Constants.c2) * Velocity;
             }
         }
         public Utilities.ErrorCodes Draw(SpriteBatch batch)
@@ -66,19 +66,39 @@ namespace Potential
         {
             //TODO: look into other integration schemes
             var dt = (float)time.ElapsedGameTime.TotalSeconds;
-
+            Momentum += dt * Force;
             if (Mass > 0)
             {
-                Velocity += dt * Force / Mass;
-                Momentum = Mass * Velocity;
+                Velocity = Momentum / Mass;
             }
             else
             {
-                Momentum += dt * Force;
-                Velocity = (Momentum / Momentum.Length()) * MAXSPEED;
+                Velocity = (Momentum / Momentum.Length()) * Constants.c;
             }
             Energy = RelativisticEnergy(Mass, Momentum);
             Position += dt * Velocity;
+        }
+        public Vector3 GravityAndElectrostatic(World world)
+        {
+            if (Mass == 0 && Charge == 0)
+            {
+                return Vector3.Zero;
+            }
+            return world.Particles.Select((p) =>
+            {
+                if (p.Position != Position)
+                {
+                    var r = p.Position - Position;
+                    var R3 = (float)System.Math.Pow(r.Length(), 3);
+                    var R = r / R3;
+                    return ((Mass * p.Mass) * Constants.G - (Charge * p.Charge) / (float)(4 * System.Math.PI * Constants.Epsilon0)) * R;
+                }
+                else
+                {
+                    return Vector3.Zero;
+                }
+
+            }).Aggregate((x, y) => x + y);
         }
         public Utilities.ErrorCodes Update(GameTime time, World world, GameState state)
         {
@@ -88,6 +108,8 @@ namespace Potential
                 return Utilities.ErrorCodes.SUCCESS;
             }
             //TODO: update forces felt by particle from other particles and fields
+            Force = Vector3.Zero;
+            Force += GravityAndElectrostatic(world);
             ApplyForce(time);
             return Utilities.ErrorCodes.SUCCESS;
         }

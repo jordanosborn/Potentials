@@ -8,8 +8,8 @@ namespace Potential
     //TODO: segment world to reduce computational complexity
     public class World : GameObject, ICloneable
     {
-        private List<Field> IntrinsicFields { get; set; }
-        private List<Particle> Particles { get; set; }
+        public List<Field> IntrinsicFields { get; set; }
+        public List<Particle> Particles { get; set; }
         public World()
         {
             IntrinsicFields = new List<Field>();

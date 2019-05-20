@@ -4,6 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Potential
 {
+    public static class Constants
+    {
+        public static float G = 1.0f;
+        public static float Epsilon0 = 1.0f;
+        public static float c = 10.0f;
+        public static float c2 = Constants.c * Constants.c;
+    }
     public static class Utilities
     {
         public enum ErrorCodes
