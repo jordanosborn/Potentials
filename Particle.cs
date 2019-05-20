@@ -16,6 +16,10 @@ namespace Potential
     public class Particle : GameObject
     {
         public static float MAXSPEED = 10.0f;
+        public static float RelativisticEnergy(float mass, Vector3 velocity)
+        {
+            return (float)(mass * MAXSPEED / System.Math.Sqrt(1.0 - velocity.LengthSquared() / (MAXSPEED * MAXSPEED))); //TODO: plus potential
+        }
         public Vector2 Origin { get; set; }
         public Texture2D Texture { get; set; } = null;
         public float Radius { get; private set; }
@@ -49,7 +53,7 @@ namespace Potential
             Velocity = (vel_scale * velocity);
             if (Mass > 0)
             {
-                Energy = (float)(Mass * MAXSPEED / System.Math.Sqrt(1.0 - Velocity.LengthSquared() / (MAXSPEED * MAXSPEED))); //TODO: plus potential
+                Energy = RelativisticEnergy(Mass, Velocity);
             }
             else
             {
@@ -72,7 +76,8 @@ namespace Potential
             if (Mass > 0)
             {
                 Velocity += dt * Force / Mass;
-                Energy = 0.5f * Mass * Velocity.LengthSquared();// TODO: + potential;
+                Momentum = Mass * Velocity;
+                Energy = RelativisticEnergy(Mass, Velocity);
             }
             else
             {
