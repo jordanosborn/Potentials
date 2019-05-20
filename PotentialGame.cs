@@ -8,9 +8,10 @@ namespace Potential
 {
     public class PotentialGame : Game
     {
-        private Dictionary<string, Texture2D> Textures = null;
+        private Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
         private SpriteFont Font = null;
         private World GameWorld = new World();
+        GameState State = GameState.Create();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SmartFramerate FPS = new SmartFramerate(5, (0, 0));
@@ -47,7 +48,6 @@ namespace Potential
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Textures = new Dictionary<string, Texture2D>();
             Textures["moon"] = Content.Load<Texture2D>("moon");
             Textures["blackhole"] = Content.Load<Texture2D>("blackhole");
             Font = Content.Load<SpriteFont>("Font");
