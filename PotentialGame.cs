@@ -17,7 +17,7 @@ namespace Potential
         private Color ColorBG = Color.Black;
         private World GameWorld = new World();
         private MouseCursor mouseCursor = null;
-        GameState State = GameState.Create();
+        GameState State = GameState.GetState();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Utilities.SmartFramerate FPS = new Utilities.SmartFramerate(5, (0, 0));

@@ -28,6 +28,7 @@ namespace Potential
         public float Energy { get; private set; }
         public float AngularVelocity { get; private set; } = 0.0f;
         public Vector3 Force { get; private set; }
+        public Tracer ParticleTracer { get; set; } = null;
         public Particle(Texture2D texture, Vector3 position, Vector3 velocity, float radius = 10.0f, float mass = 0, float charge = 0, float energy = -1.0f, float rotation = 0.0f, float angular_velocity = 0.0f, bool isfixed = false)
         {
             Texture = texture;
@@ -62,6 +63,8 @@ namespace Potential
             if (Texture == null)
                 return Utilities.ErrorCodes.FAILURE;
             batch.Draw(Texture, new Vector2(Position.X, Position.Y), origin: Origin, rotation: Rotation, scale: Scale, color: Color.White);
+            if (ParticleTracer != null)
+                ParticleTracer.Draw(batch);
             return Utilities.ErrorCodes.SUCCESS;
         }
         private void ApplyForce(GameTime time)
@@ -110,6 +113,8 @@ namespace Potential
             Force += GravityAndElectrostatic(world);
             Console.WriteLine(Force);
             ApplyForce(time);
+            if (ParticleTracer != null)
+                ParticleTracer.Update(time, world, state);
             return Utilities.ErrorCodes.SUCCESS;
         }
 
