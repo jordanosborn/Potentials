@@ -55,11 +55,12 @@ namespace Potential
                 Momentum = (Energy / Constants.c2) * Velocity;
             }
         }
+
         public Utilities.ErrorCodes Draw(SpriteBatch batch)
         {
             if (Texture == null)
                 return Utilities.ErrorCodes.FAILURE;
-            batch.Draw(Texture, new Vector2(Position.X, Position.Y), scale: Scale, color: Color.White, rotation: Rotation, origin: Origin);
+            batch.Draw(Texture, new Vector2(Position.X, Position.Y), origin: Origin, rotation: Rotation, scale: Scale, color: Color.White);
             return Utilities.ErrorCodes.SUCCESS;
         }
         private void ApplyForce(GameTime time)
@@ -80,7 +81,7 @@ namespace Potential
         }
         public Vector3 GravityAndElectrostatic(World world)
         {
-            if (Mass == 0 && Charge == 0)
+            if (MathF.Abs(Mass) < float.Epsilon && MathF.Abs(Charge) < float.Epsilon)
             {
                 return Vector3.Zero;
             }
@@ -93,11 +94,7 @@ namespace Potential
                     var R = r / R3;
                     return ((Mass * p.Mass) * Constants.G - (Charge * p.Charge) / (float)(4 * System.Math.PI * Constants.Epsilon0)) * R;
                 }
-                else
-                {
-                    return Vector3.Zero;
-                }
-
+                return Vector3.Zero;
             }).Aggregate((x, y) => x + y);
         }
         public Utilities.ErrorCodes Update(GameTime time, World world, GameState state)
