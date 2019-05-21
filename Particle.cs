@@ -94,14 +94,22 @@ namespace Potential
                 if (p.Position != Position)
                 {
                     var r = p.Position - Position;
-                    var R3 = (float)System.Math.Pow(r.Length(), 3);
-                    var R = r / R3;
-                    return ((Mass * p.Mass) * Constants.G - (Charge * p.Charge) / (float)(4 * System.Math.PI * Constants.Epsilon0)) * R;
+                    if (r.Length() > Constants.MinClassicalR)
+                    {
+                        var R3 = (float)System.Math.Pow(r.Length(), 3);
+                        var R = r / R3;
+                        return ((Mass * p.Mass) * Constants.G - (Charge * p.Charge) / (float)(4 * System.Math.PI * Constants.Epsilon0)) * R;
+                    }
+                    else
+                    {
+                        return Vector3.Zero;
+                    }
+
                 }
                 return Vector3.Zero;
             }).Aggregate((x, y) => x + y);
         }
-        public Utilities.ErrorCodes Update(GameTime time, World world, GameState state)
+        public Utilities.ErrorCodes Update(GameTime time, World world, GameState state, object args = null)
         {
             Rotation += (float)time.ElapsedGameTime.TotalSeconds * AngularVelocity;
             if (IsFixed)
@@ -111,16 +119,16 @@ namespace Potential
             //TODO: update forces felt by particle from other particles and fields
             Force = Vector3.Zero;
             Force += GravityAndElectrostatic(world);
-            Console.WriteLine(Force);
             ApplyForce(time);
             if (ParticleTracer != null)
-                ParticleTracer.Update(time, world, state);
+                ParticleTracer.Update(time, world, state, Position);
             return Utilities.ErrorCodes.SUCCESS;
         }
 
         public object Clone()
         {
             var p = new Particle(Texture, Position, Velocity, Radius, Mass, Charge, Energy, Rotation, AngularVelocity, IsFixed);
+            p.ParticleTracer = ParticleTracer;
             return p;
         }
     }

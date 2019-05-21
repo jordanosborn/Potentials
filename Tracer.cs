@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 namespace Potential
 {
     public class Tracer : GameObject
@@ -12,24 +13,46 @@ namespace Potential
         private readonly int Length;
         private readonly float Size;
         private readonly Vector2 Scale;
-        private Vector3[] PreviousLocations { get; set; } = null;
+        private LinkedList<Vector3> PreviousLocations { get; set; } = null;
 
-        public Tracer(Texture2D texture, Vector3 start, int length = 10, float spacing = 5, float size = 10, Color? color = null)
+        public Tracer(Texture2D texture, Vector3 start, int length = 10, float spacing = 20, float size = 5, Color? color = null)
         {
             ParticleTexture = texture;
             Length = length;
             Spacing = spacing;
             Size = size;
-            PreviousLocations = new Vector3[Length];
-            PreviousLocations[0] = start;
+            PreviousLocations = new LinkedList<Vector3>();
+            PreviousLocations.AddLast(start);
             if (color.HasValue)
                 ParticleColor = color.Value;
             Scale = new Vector2(Size / ParticleTexture.Width, Size / ParticleTexture.Height);
+            Origin = new Vector2(ParticleTexture.Width / 2, ParticleTexture.Height / 2);
         }
-        public Utilities.ErrorCodes Update(GameTime time, World world, GameState state)
+        private Tracer(Texture2D texture, LinkedList<Vector3> start, int length = 10, float spacing = 5, float size = 10, Color? color = null)
         {
+            ParticleTexture = texture;
+            Length = length;
+            Spacing = spacing;
+            Size = size;
+            PreviousLocations = start;
+            if (color.HasValue)
+                ParticleColor = color.Value;
+            Scale = new Vector2(Size / ParticleTexture.Width, Size / ParticleTexture.Height);
+            Origin = new Vector2(ParticleTexture.Width / 2, ParticleTexture.Height / 2);
+        }
+        public Utilities.ErrorCodes Update(GameTime time, World world, GameState state, object position)
+        {
+            var start = (Vector3)position;
+            var difference = start - PreviousLocations.Last.Value;
             //TODO: track
-
+            if (difference.Length() > Spacing)
+            {
+                if (PreviousLocations.Count == Length)
+                {
+                    PreviousLocations.RemoveFirst();
+                }
+                PreviousLocations.AddLast(start);
+            }
             return Utilities.ErrorCodes.SUCCESS;
         }
         public Utilities.ErrorCodes Draw(SpriteBatch batch)
@@ -44,7 +67,7 @@ namespace Potential
 
         public object Clone()
         {
-            return new Tracer(ParticleTexture, PreviousLocations[0], Length, Spacing, Size, ParticleColor);
+            return new Tracer(ParticleTexture, PreviousLocations, Length, Spacing, Size, ParticleColor);
         }
     }
 }

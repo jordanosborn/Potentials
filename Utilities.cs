@@ -10,7 +10,7 @@ namespace Potential.Utilities
         public static float Epsilon0 = 1.0f;
         public static float c = 10.0f;
         public static float c2 = Constants.c * Constants.c;
-        public static float MinClassicalR = 5.0f;
+        public static float MinClassicalR = 3.0f;
     }
 
     public enum ErrorCodes

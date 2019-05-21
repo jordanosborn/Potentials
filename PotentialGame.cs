@@ -49,10 +49,13 @@ namespace Potential
             mouseCursor = MouseCursor.FromTexture2D(Textures["cursor"],
                 Textures["cursor"].Width / 2, Textures["cursor"].Height / 2);
             Mouse.SetCursor(mouseCursor);
-            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(200, 200, 0),
-                new Vector3(10, 0, 0), 50, mass: 1.0f));
             GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 300, 0),
-                new Vector3(0, 0, 0), 50, mass: 50000.0f, angular_velocity: -0.8f, isfixed: true));
+                new Vector3(0, 0, 0), 50, mass: 50000.0f, angular_velocity: -0.8f, isfixed: false));
+            GameWorld.Particles[0].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[0].Position, color: Color.Red);
+            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(200, 200, 0),
+                new Vector3(10, 0, 0), 50, mass: 50000.0f));
+            GameWorld.Particles[1].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[1].Position, color: Color.Blue);
+
             base.Initialize();
         }
 
@@ -62,6 +65,7 @@ namespace Potential
             Textures["moon"] = Content.Load<Texture2D>("moon");
             Textures["blackhole"] = Content.Load<Texture2D>("blackhole");
             Textures["cursor"] = Content.Load<Texture2D>("cursor");
+            Textures["tracer"] = Content.Load<Texture2D>("circle");
             Font = Content.Load<SpriteFont>("Font");
         }
 
