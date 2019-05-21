@@ -102,7 +102,7 @@ namespace Potential
             if (Texture == null)
                 return Utilities.ErrorCodes.FAILURE;
             batch.Draw(Texture, new Vector2(Position.X, Position.Y), origin: Origin, rotation: Rotation, scale: Scale, color: Color.White);
-            if (ParticleTracer != null)
+            if (ParticleTracer != null && GameState.GetState().Flags.Contains(GameState.UIFlags.TRACERS_ON))
                 ParticleTracer.Draw(batch);
             return Utilities.ErrorCodes.SUCCESS;
         }
@@ -187,6 +187,7 @@ namespace Potential
         }
         public Utilities.ErrorCodes Update(GameTime time, World world, GameState state, object args = null)
         {
+            //TODO: add collisions
             Rotation += (float)time.ElapsedGameTime.TotalSeconds * AngularVelocity;
             if (IsFixed)
             {
@@ -197,7 +198,7 @@ namespace Potential
             Force += GravityAndElectrostatic(world);
             Force += ApplyInterParticleForces(world);
             ApplyForce(time);
-            if (ParticleTracer != null)
+            if (ParticleTracer != null && GameState.GetState().Flags.Contains(GameState.UIFlags.TRACERS_ON))
                 ParticleTracer.Update(time, world, state, this);
             return Utilities.ErrorCodes.SUCCESS;
         }

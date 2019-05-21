@@ -18,7 +18,7 @@ namespace Potential
         private LinkedList<Vector3> PreviousLocations { get; set; } = null;
         private LinkedList<Vector3> PreviousOrientations { get; set; } = null;
 
-        public Tracer(Texture2D texture, Particle p, int length = 10, float spacing = 20, float tracerwidth = 10, float tracerheight = 5, Color? color = null)
+        public Tracer(Texture2D texture, Particle p, int length = 10, float spacing = 20, float tracerwidth = 20, float tracerheight = 5, Color? color = null)
         {
             ParticleTexture = texture;
             Length = length;
@@ -38,7 +38,7 @@ namespace Potential
             Scale = new Vector2(TracerWidth / ParticleTexture.Width, TracerHeight / ParticleTexture.Height);
             Origin = new Vector2(ParticleTexture.Width / 2, ParticleTexture.Height / 2);
         }
-        private Tracer(Texture2D texture, LinkedList<Vector3> start, LinkedList<Vector3> orientations, int length = 10, float spacing = 5, float tracerwidth = 10, float tracerheight = 5, Color? color = null)
+        private Tracer(Texture2D texture, LinkedList<Vector3> start, LinkedList<Vector3> orientations, int length, float spacing, float tracerwidth, float tracerheight, Color? color)
         {
             ParticleTexture = texture;
             Length = length;
