@@ -4,3 +4,4 @@ Potentials Tower Defense Game!
     dotnet run
 ### Controls
     ESC - Quit
+    SPACE - Pause
