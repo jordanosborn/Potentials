@@ -10,7 +10,10 @@ namespace Potential
     {
         private Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
         private SpriteFont Font = null;
+        private Color ColorFG = Color.White;
+        private Color ColorBG = Color.Black;
         private World GameWorld = new World();
+        private MouseCursor mouseCursor = null;
         GameState State = GameState.Create();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -40,8 +43,13 @@ namespace Potential
 
         protected override void Initialize()
         {
-            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(100, 100, 0), new Vector3(10, 0, 0), 50, mass: 1.0f, energy: 5.0f));
-            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 300, 0), new Vector3(0, 0, 0), 50, mass: 1.0f, angular_velocity: -0.8f, isfixed: true));
+            mouseCursor = MouseCursor.FromTexture2D(Textures["cursor"],
+                Textures["cursor"].Width / 2, Textures["cursor"].Height / 2);
+            Mouse.SetCursor(mouseCursor);
+            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(100, 100, 0),
+                new Vector3(10, 0, 0), 50, mass: 1.0f, energy: 5.0f));
+            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 300, 0),
+                new Vector3(0, 0, 0), 50, mass: 1.0f, angular_velocity: -0.8f, isfixed: true));
             base.Initialize();
         }
 
@@ -50,6 +58,7 @@ namespace Potential
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Textures["moon"] = Content.Load<Texture2D>("moon");
             Textures["blackhole"] = Content.Load<Texture2D>("blackhole");
+            Textures["cursor"] = Content.Load<Texture2D>("cursor");
             Font = Content.Load<SpriteFont>("Font");
         }
 
@@ -67,12 +76,12 @@ namespace Potential
         protected void DrawUI(GameTime gameTime)
         {
             //FPS counter
-            spriteBatch.DrawString(Font, $"{System.Math.Round(FPS.Framerate, 1)} fps", FPS.Position, Color.Black);
+            spriteBatch.DrawString(Font, $"{System.Math.Round(FPS.Framerate, 1)} fps", FPS.Position, ColorFG);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
+            GraphicsDevice.Clear(ColorBG);
             spriteBatch.Begin();
             GameWorld.Draw(spriteBatch);
             DrawUI(gameTime);

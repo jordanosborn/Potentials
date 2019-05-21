@@ -11,7 +11,7 @@ namespace Potential
         public static float c = 10.0f;
         public static float c2 = Constants.c * Constants.c;
     }
-    public static class Utilities
+    namespace Utilities
     {
         public enum ErrorCodes
         {
