@@ -20,7 +20,7 @@ namespace Potential
         GameState State = GameState.GetState();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Utilities.SmartFramerate FPS = new Utilities.SmartFramerate(5, (0, 0));
+        Utilities.SmartFramerate FPS = new Utilities.SmartFramerate(5, (4, 0));
         private void HandleResizeEvent(Object sender, EventArgs a)
         {
             if (Window.ClientBounds.Height < MinSize.Item2)
@@ -66,6 +66,7 @@ namespace Potential
             Textures["blackhole"] = Content.Load<Texture2D>("blackhole");
             Textures["cursor"] = Content.Load<Texture2D>("cursor");
             Textures["tracer"] = Content.Load<Texture2D>("circle");
+            Textures["background"] = Content.Load<Texture2D>("background");
             Font = Content.Load<SpriteFont>("Font");
         }
 
@@ -113,6 +114,11 @@ namespace Potential
         {
             GraphicsDevice.Clear(ColorBG);
             spriteBatch.Begin();
+            var bg = Textures["background"];
+            spriteBatch.Draw(bg, position: Vector2.Zero,
+                origin: Vector2.Zero, color: Color.White,
+                scale: new Vector2(Window.ClientBounds.Width / (float)bg.Width, Window.ClientBounds.Height / (float)bg.Height)
+            );
             GameWorld.Draw(spriteBatch);
             DrawUI(gameTime);
             spriteBatch.End();
