@@ -5,3 +5,4 @@ Potentials Tower Defense Game!
 ### Controls
     ESC - Quit
     SPACE - Pause
+    T - Tracers On/Off
