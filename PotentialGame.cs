@@ -74,10 +74,7 @@ namespace Potential
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                State.IsPaused = !State.IsPaused;
-            }
+            State.Update(gameTime, GameWorld, null, Keyboard.GetState());
             if (!State.IsPaused)
             {
                 World newWorld = (World)GameWorld.Clone();
@@ -98,16 +95,14 @@ namespace Potential
                 X = 0;
                 Y = 0;
             }
-            var spacing = "    ";
-            var s = new StringBuilder($"{System.Math.Round(FPS.Framerate, 0)}FPS");
-            s.Append(spacing);
-            s.Append($"({X}, {Y})");
-            s.Append(spacing);
-            if (State.IsPaused)
-                s.Append("PAUSED");
-            s.Append(spacing);
-            //TODO: draw item selection so can click and create
-            spriteBatch.DrawString(Font, s.ToString(), FPS.Position, ColorFG);
+            string[] TextUI = {
+                $"{System.Math.Round(FPS.Framerate, 0)}FPS",
+                $"({X}, {Y})",
+                (State.IsPaused)? "PAUSED": ""
+            };
+            var s = string.Join("    ", TextUI);
+            spriteBatch.DrawString(Font, s, FPS.Position, ColorFG);
+            State.Draw(spriteBatch);
         }
 
         protected override void Draw(GameTime gameTime)
