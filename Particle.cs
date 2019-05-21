@@ -198,7 +198,7 @@ namespace Potential
             Force += ApplyInterParticleForces(world);
             ApplyForce(time);
             if (ParticleTracer != null)
-                ParticleTracer.Update(time, world, state, Position);
+                ParticleTracer.Update(time, world, state, this);
             return Utilities.ErrorCodes.SUCCESS;
         }
 

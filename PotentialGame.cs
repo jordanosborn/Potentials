@@ -50,10 +50,10 @@ namespace Potential
             Mouse.SetCursor(mouseCursor);
             GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 200, 0),
                 new Vector3(0, -50, 0), 50, mass: 0, angular_velocity: -0.8f, isfixed: false));
-            GameWorld.Particles[0].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[0].Position, color: Color.Red);
+            GameWorld.Particles[0].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[0], color: Color.Red);
             GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(200, 200, 0),
                 new Vector3(0, 50, 0), 50, mass: 0));
-            GameWorld.Particles[1].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[1].Position, color: Color.Blue);
+            GameWorld.Particles[1].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[1], color: Color.Blue);
             GameWorld.Particles[1].AddInterParticleForceSymmetric(
                 GameWorld.Particles[0],
                 ForceFactory.ForceFactory.SpringForce(0.001f, 10.0f)
