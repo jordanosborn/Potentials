@@ -101,6 +101,7 @@ namespace Potential
             if (State.IsPaused)
                 s.Append("PAUSED");
             s.Append(spacing);
+            //TODO: draw item selection so can click and create
             spriteBatch.DrawString(Font, s.ToString(), FPS.Position, ColorFG);
         }
 
