@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-namespace Potential
+namespace Potential.Utilities
 {
     public static class Constants
     {
@@ -10,15 +10,15 @@ namespace Potential
         public static float Epsilon0 = 1.0f;
         public static float c = 10.0f;
         public static float c2 = Constants.c * Constants.c;
+        public static float MinClassicalR = 5.0f;
     }
-    namespace Utilities
+
+    public enum ErrorCodes
     {
-        public enum ErrorCodes
-        {
-            SUCCESS,
-            FAILURE
-        }
+        SUCCESS,
+        FAILURE
     }
+
     class SmartFramerate
     {
         double currentFrametimes;
@@ -30,7 +30,7 @@ namespace Potential
         {
             get
             {
-                return (numerator / currentFrametimes);
+                return (currentFrametimes != 0) ? (numerator / currentFrametimes) : 0;
             }
         }
 

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 namespace Potential
 {
-    //TODO: segment world to reduce computational complexity
+    //TODO: segment world to reduce computational complexity, scale pixels to real world values;
     public class World : GameObject, ICloneable
     {
         public List<Field> IntrinsicFields { get; set; }

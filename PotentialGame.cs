@@ -3,12 +3,15 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Potential
 {
     public class PotentialGame : Game
     {
         private Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
+        private (int, int) DefaultSize = (600, 600);
+        private (int, int) MinSize = (600, 600);
         private SpriteFont Font = null;
         private Color ColorFG = Color.White;
         private Color ColorBG = Color.Black;
@@ -17,21 +20,21 @@ namespace Potential
         GameState State = GameState.Create();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SmartFramerate FPS = new SmartFramerate(5, (0, 0));
+        Utilities.SmartFramerate FPS = new Utilities.SmartFramerate(5, (0, 0));
         private void HandleResizeEvent(Object sender, EventArgs a)
         {
-            if (Window.ClientBounds.Height < 600)
-                graphics.PreferredBackBufferHeight = 600;
-            if (Window.ClientBounds.Width < 600)
-                graphics.PreferredBackBufferWidth = 600;
+            if (Window.ClientBounds.Height < MinSize.Item2)
+                graphics.PreferredBackBufferHeight = MinSize.Item2;
+            if (Window.ClientBounds.Width < MinSize.Item1)
+                graphics.PreferredBackBufferWidth = MinSize.Item1;
             graphics.ApplyChanges();
         }
 
         public PotentialGame()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 600;
-            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = DefaultSize.Item1;
+            graphics.PreferredBackBufferHeight = DefaultSize.Item2;
             graphics.ApplyChanges();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -46,10 +49,10 @@ namespace Potential
             mouseCursor = MouseCursor.FromTexture2D(Textures["cursor"],
                 Textures["cursor"].Width / 2, Textures["cursor"].Height / 2);
             Mouse.SetCursor(mouseCursor);
-            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(100, 100, 0),
-                new Vector3(10, 0, 0), 50, mass: 1.0f, energy: 5.0f));
+            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(200, 200, 0),
+                new Vector3(10, 0, 0), 50, mass: 1.0f));
             GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 300, 0),
-                new Vector3(0, 0, 0), 50, mass: 1.0f, angular_velocity: -0.8f, isfixed: true));
+                new Vector3(0, 0, 0), 50, mass: 50000.0f, angular_velocity: -0.8f, isfixed: true));
             base.Initialize();
         }
 
@@ -66,17 +69,39 @@ namespace Potential
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            World newWorld = (World)GameWorld.Clone();
-            newWorld.Update(gameTime, GameWorld);
-            GameWorld = newWorld;
-            FPS.Update(gameTime);
-            base.Update(gameTime);
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                State.IsPaused = !State.IsPaused;
+            }
+            if (!State.IsPaused)
+            {
+                World newWorld = (World)GameWorld.Clone();
+                newWorld.Update(gameTime, GameWorld);
+                GameWorld = newWorld;
+                FPS.Update(gameTime);
+                base.Update(gameTime);
+            }
         }
 
         protected void DrawUI(GameTime gameTime)
         {
-            //FPS counter
-            spriteBatch.DrawString(Font, $"{System.Math.Round(FPS.Framerate, 1)} fps", FPS.Position, ColorFG);
+            var mouse_state = Mouse.GetState();
+            int X = mouse_state.X, Y = mouse_state.Y;
+            if ((mouse_state.X < 0 || mouse_state.X > Window.ClientBounds.Width) ||
+                (mouse_state.Y < 0 || mouse_state.Y > Window.ClientBounds.Height))
+            {
+                X = 0;
+                Y = 0;
+            }
+            var spacing = "    ";
+            var s = new StringBuilder($"{System.Math.Round(FPS.Framerate, 0)}FPS");
+            s.Append(spacing);
+            s.Append($"({X}, {Y})");
+            s.Append(spacing);
+            if (State.IsPaused)
+                s.Append("PAUSED");
+            s.Append(spacing);
+            spriteBatch.DrawString(Font, s.ToString(), FPS.Position, ColorFG);
         }
 
         protected override void Draw(GameTime gameTime)

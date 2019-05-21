@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 using System;
+using Potential.Utilities;
 namespace Potential
 {
     public class Particle : GameObject
@@ -107,6 +108,7 @@ namespace Potential
             //TODO: update forces felt by particle from other particles and fields
             Force = Vector3.Zero;
             Force += GravityAndElectrostatic(world);
+            Console.WriteLine(Force);
             ApplyForce(time);
             return Utilities.ErrorCodes.SUCCESS;
         }
