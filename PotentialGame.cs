@@ -48,13 +48,16 @@ namespace Potential
             mouseCursor = MouseCursor.FromTexture2D(Textures["cursor"],
                 Textures["cursor"].Width / 2, Textures["cursor"].Height / 2);
             Mouse.SetCursor(mouseCursor);
-            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 300, 0),
-                new Vector3(0, 0, 0), 50, mass: 50000.0f, angular_velocity: -0.8f, isfixed: false));
+            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 200, 0),
+                new Vector3(0, -50, 0), 50, mass: 0, angular_velocity: -0.8f, isfixed: false));
             GameWorld.Particles[0].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[0].Position, color: Color.Red);
             GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(200, 200, 0),
-                new Vector3(50, 0, 0), 50, mass: 50_000.0f));
+                new Vector3(0, 50, 0), 50, mass: 0));
             GameWorld.Particles[1].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[1].Position, color: Color.Blue);
-
+            GameWorld.Particles[1].AddInterParticleForceSymmetric(
+                GameWorld.Particles[0],
+                ForceFactory.ForceFactory.SpringForce(0.001f, 10.0f)
+            );
             base.Initialize();
         }
 
@@ -74,9 +77,12 @@ namespace Potential
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed) {
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
                 Mouse.SetCursor(MouseCursor.Crosshair);
-            } else if (Mouse.GetState().LeftButton == ButtonState.Released) {
+            }
+            else if (Mouse.GetState().LeftButton == ButtonState.Released)
+            {
                 Mouse.SetCursor(mouseCursor);
             }
             State.Update(gameTime, GameWorld, null, Keyboard.GetState());

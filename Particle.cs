@@ -3,10 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 using System;
 using Potential.Utilities;
+using System.Collections.Generic;
 namespace Potential
 {
     public class Particle : GameObject
     {
+        private static UInt64 ParticleCounter = 0;
         public static float RelativisticEnergy(float mass, Vector3 momentum)
         {
             if (mass > 0)
@@ -14,6 +16,7 @@ namespace Potential
             else
                 return momentum.Length() * Constants.c;
         }
+        public UInt64? ID { get; private set; } = null;
         public Vector2 Origin { get; set; }
         public Texture2D Texture { get; set; } = null;
         public float Radius { get; private set; }
@@ -28,9 +31,44 @@ namespace Potential
         public float Energy { get; private set; }
         public float AngularVelocity { get; private set; } = 0.0f;
         public Vector3 Force { get; private set; }
+
+        private List<(UInt64, Func<Particle, Particle, Vector3>)> InterParticleForces = new List<(UInt64, Func<Particle, Particle, Vector3>)>();
         public Tracer ParticleTracer { get; set; } = null;
         public Particle(Texture2D texture, Vector3 position, Vector3 velocity, float radius = 10.0f, float mass = 0, float charge = 0, float energy = -1.0f, float rotation = 0.0f, float angular_velocity = 0.0f, bool isfixed = false)
         {
+            ID = ParticleCounter;
+            ParticleCounter++;
+            Texture = texture;
+            Position = position;
+            Radius = radius;
+            Mass = mass;
+            Charge = charge;
+            IsFixed = isfixed;
+            AngularVelocity = angular_velocity;
+            Rotation = rotation;
+            Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+            Scale = new Vector2(Radius / Texture.Width, Radius / Texture.Height);
+            Force = new Vector3(0, 0, 0);
+            float vel_scale = (Mass > 0) ? velocity.Length() : Constants.c;
+            if (velocity != Vector3.Zero)
+                velocity.Normalize();
+            vel_scale = (vel_scale > Constants.c) ? Constants.c : vel_scale;
+            Velocity = (vel_scale * velocity);
+            if (Mass > 0)
+            {
+                Momentum = Mass * Velocity;
+                Energy = RelativisticEnergy(Mass, Momentum);
+            }
+            else
+            {
+                Energy = (energy <= 0) ? 1.0f : energy; //TODO: plus potential
+                Momentum = (Energy / Constants.c2) * Velocity;
+            }
+        }
+
+        private Particle(UInt64? id, Texture2D texture, Vector3 position, Vector3 velocity, float radius = 10.0f, float mass = 0, float charge = 0, float energy = -1.0f, float rotation = 0.0f, float angular_velocity = 0.0f, bool isfixed = false)
+        {
+            ID = id;
             Texture = texture;
             Position = position;
             Radius = radius;
@@ -84,6 +122,43 @@ namespace Potential
             Energy = RelativisticEnergy(Mass, Momentum);
             Position += dt * Velocity;
         }
+        public void AddInterParticleForce(UInt64? particle_id, Func<Particle, Particle, Vector3> force)
+        {
+            if (particle_id.HasValue && particle_id < ParticleCounter)
+            {
+                InterParticleForces.Add((particle_id.Value, force));
+            }
+        }
+        public void RemoveInterParticleForce(UInt64 position)
+        {
+            if (InterParticleForces.Count() > (int)position)
+            {
+                InterParticleForces[(int)position] = (InterParticleForces[(int)position].Item1, null);
+            }
+        }
+        public void AddInterParticleForceSymmetric(Particle p, Func<Particle, Particle, Vector3> force)
+        {
+            InterParticleForces.Add((p.ID.Value, force));
+            p.InterParticleForces.Add((ID.Value, force));
+        }
+        public void RemoveInterParticleForceSymmetric()
+        {
+            //TODO: think
+        }
+
+        public Vector3 ApplyInterParticleForces(World world)
+        {
+            var sum = Vector3.Zero;
+            foreach (var e in InterParticleForces)
+            {
+                var p2 = world.Particles.Where((p) => p.ID == e.Item1).ToList();
+                if (p2.Count() == 1)
+                {
+                    sum += e.Item2(this, p2[0]);
+                }
+            }
+            return sum;
+        }
         public Vector3 GravityAndElectrostatic(World world)
         {
             if (MathF.Abs(Mass) < float.Epsilon && MathF.Abs(Charge) < float.Epsilon)
@@ -120,6 +195,7 @@ namespace Potential
             //TODO: update forces felt by particle from other particles and fields
             Force = Vector3.Zero;
             Force += GravityAndElectrostatic(world);
+            Force += ApplyInterParticleForces(world);
             ApplyForce(time);
             if (ParticleTracer != null)
                 ParticleTracer.Update(time, world, state, Position);
@@ -128,8 +204,9 @@ namespace Potential
 
         public object Clone()
         {
-            var p = new Particle(Texture, Position, Velocity, Radius, Mass, Charge, Energy, Rotation, AngularVelocity, IsFixed);
+            var p = new Particle(ID, Texture, Position, Velocity, Radius, Mass, Charge, Energy, Rotation, AngularVelocity, IsFixed);
             p.ParticleTracer = ParticleTracer;
+            p.InterParticleForces = InterParticleForces;
             return p;
         }
     }

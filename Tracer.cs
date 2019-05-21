@@ -57,6 +57,8 @@ namespace Potential
         }
         public Utilities.ErrorCodes Draw(SpriteBatch batch)
         {
+            //TODO: draw extended length along velocity direction!
+
             foreach (var e in PreviousLocations)
             {
                 batch.Draw(ParticleTexture, new Vector2(e.X, e.Y),
