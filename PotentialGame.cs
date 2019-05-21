@@ -74,6 +74,11 @@ namespace Potential
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed) {
+                Mouse.SetCursor(MouseCursor.Crosshair);
+            } else if (Mouse.GetState().LeftButton == ButtonState.Released) {
+                Mouse.SetCursor(mouseCursor);
+            }
             State.Update(gameTime, GameWorld, null, Keyboard.GetState());
             if (!State.IsPaused)
             {
