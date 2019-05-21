@@ -17,10 +17,9 @@ namespace Potential
         private Color ColorBG = Color.Black;
         private World GameWorld = new World();
         private MouseCursor mouseCursor = null;
-        GameState State = GameState.GetState();
+        GameState State = null;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Utilities.SmartFramerate FPS = new Utilities.SmartFramerate(5, (4, 0));
         private void HandleResizeEvent(Object sender, EventArgs a)
         {
             if (Window.ClientBounds.Height < MinSize.Item2)
@@ -68,6 +67,7 @@ namespace Potential
             Textures["tracer"] = Content.Load<Texture2D>("circle");
             Textures["background"] = Content.Load<Texture2D>("background");
             Font = Content.Load<SpriteFont>("Font");
+            State = GameState.GetState(Font);
         }
 
         protected override void Update(GameTime gameTime)
@@ -80,29 +80,8 @@ namespace Potential
                 World newWorld = (World)GameWorld.Clone();
                 newWorld.Update(gameTime, GameWorld);
                 GameWorld = newWorld;
-                FPS.Update(gameTime);
                 base.Update(gameTime);
             }
-        }
-
-        protected void DrawUI(GameTime gameTime)
-        {
-            var mouse_state = Mouse.GetState();
-            int X = mouse_state.X, Y = mouse_state.Y;
-            if ((mouse_state.X < 0 || mouse_state.X > Window.ClientBounds.Width) ||
-                (mouse_state.Y < 0 || mouse_state.Y > Window.ClientBounds.Height))
-            {
-                X = 0;
-                Y = 0;
-            }
-            string[] TextUI = {
-                $"{System.Math.Round(FPS.Framerate, 0)}FPS",
-                $"({X}, {Y})",
-                (State.IsPaused)? "PAUSED": ""
-            };
-            var s = string.Join("    ", TextUI);
-            spriteBatch.DrawString(Font, s, FPS.Position, ColorFG);
-            State.Draw(spriteBatch);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -115,7 +94,7 @@ namespace Potential
                 scale: new Vector2(Window.ClientBounds.Width / (float)bg.Width, Window.ClientBounds.Height / (float)bg.Height)
             );
             GameWorld.Draw(spriteBatch);
-            DrawUI(gameTime);
+            State.Draw(spriteBatch, Window);
             spriteBatch.End();
             base.Draw(gameTime);
         }
