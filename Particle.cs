@@ -43,7 +43,8 @@ namespace Potential
             Scale = new Vector2(Radius / Texture.Width, Radius / Texture.Height);
             Force = new Vector3(0, 0, 0);
             float vel_scale = (Mass > 0) ? velocity.Length() : Constants.c;
-            velocity.Normalize();
+            if (velocity != Vector3.Zero)
+                velocity.Normalize();
             vel_scale = (vel_scale > Constants.c) ? Constants.c : vel_scale;
             Velocity = (vel_scale * velocity);
             if (Mass > 0)

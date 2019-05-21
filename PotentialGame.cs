@@ -53,7 +53,7 @@ namespace Potential
                 new Vector3(0, 0, 0), 50, mass: 50000.0f, angular_velocity: -0.8f, isfixed: false));
             GameWorld.Particles[0].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[0].Position, color: Color.Red);
             GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(200, 200, 0),
-                new Vector3(10, 0, 0), 50, mass: 50000.0f));
+                new Vector3(50, 0, 0), 50, mass: 50_000.0f));
             GameWorld.Particles[1].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[1].Position, color: Color.Blue);
 
             base.Initialize();
