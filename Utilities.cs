@@ -9,7 +9,7 @@ namespace Potential.Utilities
         public static float G = 1.0f;
         public static float Epsilon0 = 1.0f;
         public static float c = 10.0f;
-        public static float c2 = Constants.c * Constants.c;
+        public static float c2 = (float)Math.Pow(c, 2);
         public static float MinClassicalR = 3.0f;
     }
 
@@ -22,8 +22,8 @@ namespace Potential.Utilities
     class SmartFramerate
     {
         double currentFrametimes;
-        double weight;
-        int numerator;
+        readonly double weight;
+        readonly int numerator;
         public Vector2 Position { get; set; }
 
         public double Framerate

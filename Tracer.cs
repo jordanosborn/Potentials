@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 namespace Potential
 {
     public class Tracer : GameObject
@@ -27,14 +27,20 @@ namespace Potential
             TracerHeight = tracerheight;
             var start = p.Position;
             var orientation = p.Velocity;
-            if (orientation.Length() != 0)
+            if (Math.Abs(orientation.Length()) > float.Epsilon)
+            {
                 orientation.Normalize();
+            }
+
             PreviousLocations = new LinkedList<Vector3>();
             PreviousLocations.AddLast(start);
             PreviousOrientations = new LinkedList<Vector3>();
             PreviousOrientations.AddLast(orientation);
             if (color.HasValue)
+            {
                 ParticleColor = color.Value;
+            }
+
             Scale = new Vector2(TracerWidth / ParticleTexture.Width, TracerHeight / ParticleTexture.Height);
             Origin = new Vector2(ParticleTexture.Width / 2, ParticleTexture.Height / 2);
         }
@@ -48,7 +54,10 @@ namespace Potential
             PreviousLocations = start;
             PreviousOrientations = orientations;
             if (color.HasValue)
+            {
                 ParticleColor = color.Value;
+            }
+
             Scale = new Vector2(TracerWidth / ParticleTexture.Width, TracerHeight / ParticleTexture.Height);
             Origin = new Vector2(ParticleTexture.Width / 2, ParticleTexture.Height / 2);
         }
@@ -57,7 +66,7 @@ namespace Potential
             var p = (Particle)particle;
             var start = p.Position;
             var vel = p.Velocity;
-            if (vel.Length() != 0)
+            if (Math.Abs(vel.Length()) > float.Epsilon)
             {
                 vel.Normalize();
             }
@@ -84,7 +93,7 @@ namespace Potential
                 if (orientation != Vector3.Zero)
                 {
                     var cos_theta = Vector3.Dot(orientation, Vector3.UnitX) / orientation.Length();
-                    theta = (float)System.Math.Acos(cos_theta);
+                    theta = (float)Math.Acos(cos_theta);
                 }
                 batch.Draw(ParticleTexture, new Vector2(position.X, position.Y),
                     origin: Origin, scale: new Vector2(Scale.X, Scale.Y), rotation: theta, color: ParticleColor);

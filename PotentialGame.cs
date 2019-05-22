@@ -17,11 +17,11 @@ namespace Potential
         private Color ColorFG = Color.White;
         private Color ColorBG = Color.Black;
         private World GameWorld = new World();
-        private MouseCursor mouseCursor = null;
-        GameState State = null;
+        private MouseCursor mouseCursor;
+        GameState State;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private void HandleResizeEvent(Object sender, EventArgs a)
+        private void HandleResizeEvent(object sender, EventArgs a)
         {
             if (Window.ClientBounds.Height < MinSize.Item2)
                 graphics.PreferredBackBufferHeight = MinSize.Item2;
@@ -41,11 +41,11 @@ namespace Potential
             Window.Title = "Potential";
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += HandleResizeEvent;
-            LoadContent();
         }
 
         protected override void Initialize()
         {
+            LoadContent();
             mouseCursor = MouseCursor.FromTexture2D(Textures["cursor"],
                 Textures["cursor"].Width / 2, Textures["cursor"].Height / 2);
             Mouse.SetCursor(mouseCursor);
@@ -56,8 +56,8 @@ namespace Potential
                 new Vector3(0, 50, 0), 50, mass: 0));
             GameWorld.Particles[1].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[1], color: Color.Blue);
             GameWorld.Particles[1].AddInterParticleForceSymmetric(
-            GameWorld.Particles[0],
-            Force.Factory.SpringForce(0.001f, 0.0f)
+                GameWorld.Particles[0],
+                Force.Factory.SpringForce(0.001f, 0.0f)
             );
             base.Initialize();
         }

@@ -25,12 +25,12 @@ namespace Potential
         private Color ColorFG = Color.White;
         private Color ColorBG = Color.Black;
         private SpriteFont Font { get; set; } = null;
-        Utilities.SmartFramerate FPS = new Utilities.SmartFramerate(5, (4, 0));
+        readonly SmartFramerate FPS = new SmartFramerate(5, (4, 0));
         private Keys? LastPressed { get; set; } = null;
         private MouseButtonCode? LastClicked { get; set; } = null;
         public HashSet<UIFlags> Flags { get; private set; } = new HashSet<UIFlags>();
         public bool IsPaused { get => Flags.Contains(UIFlags.PAUSED); }
-        public static GameState state = null;
+        public static GameState state;
 
         public static GameState GetState(SpriteFont font = null)
         {
@@ -148,7 +148,7 @@ namespace Potential
 
 
             FPS.Update(time);
-            return Utilities.ErrorCodes.SUCCESS;
+            return ErrorCodes.SUCCESS;
         }
         public object Clone()
         {

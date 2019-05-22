@@ -47,7 +47,7 @@ namespace Potential
 
         public Utilities.ErrorCodes Update(GameTime time, World world = null, GameState state = null, object args = null)
         {
-            world = (world == null) ? this : world;
+            world = world ?? (this);
             foreach (var p in Particles)
             {
                 p.Update(time, world, state);

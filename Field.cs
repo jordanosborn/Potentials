@@ -1,10 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System.Linq;
 using System;
 namespace Potential
 {
+    using Utilities;
 
     public interface Field : GameObject
     {
@@ -36,14 +35,14 @@ namespace Potential
 
             return 0.0f;
         }
-        public Utilities.ErrorCodes Update(GameTime time, World world = null, GameState state = null, object args = null)
+        public ErrorCodes Update(GameTime time, World world = null, GameState state = null, object args = null)
         {
-            return Utilities.ErrorCodes.SUCCESS;
+            return ErrorCodes.SUCCESS;
         }
 
-        public Utilities.ErrorCodes Draw(SpriteBatch batch)
+        public ErrorCodes Draw(SpriteBatch batch)
         {
-            return Utilities.ErrorCodes.SUCCESS;
+            return ErrorCodes.SUCCESS;
         }
 
         public object Clone()
@@ -60,8 +59,8 @@ namespace Potential
         private readonly CombineBy C;
         CombinedField(Field f, Field g, CombineBy c)
         {
-            CombinatorParticle = CombinedField.CombineFunction<Particle>(c);
-            CombinatorPosition = CombinedField.CombineFunction(c);
+            CombinatorParticle = CombineFunction<Particle>(c);
+            CombinatorPosition = CombineFunction(c);
             F = new Field[2];
             F[0] = f;
             F[1] = g;
@@ -86,7 +85,7 @@ namespace Potential
                     f = (x, y, p) => x / y.Value(p);
                     break;
                 case CombineBy.EXPONENTIATION:
-                    f = (x, y, p) => (float)System.Math.Pow(x, y.Value(p));
+                    f = (x, y, p) => (float)Math.Pow(x, y.Value(p));
                     break;
             }
             return f;
@@ -116,8 +115,8 @@ namespace Potential
         }
         CombinedField(Field[] f, CombineBy c)
         {
-            CombinatorParticle = CombinedField.CombineFunction<Particle>(c);
-            CombinatorPosition = CombinedField.CombineFunction(c);
+            CombinatorParticle = CombineFunction<Particle>(c);
+            CombinatorPosition = CombineFunction(c);
             F = f;
         }
 
@@ -139,13 +138,13 @@ namespace Potential
             }
             return sum;
         }
-        public Utilities.ErrorCodes Update(GameTime time, World world = null, GameState state = null, object args = null)
+        public ErrorCodes Update(GameTime time, World world = null, GameState state = null, object args = null)
         {
-            return Utilities.ErrorCodes.SUCCESS;
+            return ErrorCodes.SUCCESS;
         }
-        public Utilities.ErrorCodes Draw(SpriteBatch batch)
+        public ErrorCodes Draw(SpriteBatch batch)
         {
-            return Utilities.ErrorCodes.SUCCESS;
+            return ErrorCodes.SUCCESS;
         }
         public object Clone()
         {

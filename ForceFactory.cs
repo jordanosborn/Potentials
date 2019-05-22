@@ -1,6 +1,5 @@
 using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 namespace Potential.Force
 {
     using Function = Func<Particle, Particle, Vector3>;

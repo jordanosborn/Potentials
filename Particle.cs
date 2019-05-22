@@ -8,11 +8,11 @@ namespace Potential
 {
     public class Particle : GameObject
     {
-        private static UInt64 ParticleCounter = 0;
+        private static ulong ParticleCounter = 0;
         public static float RelativisticEnergy(float mass, Vector3 momentum)
         {
             if (mass > 0)
-                return (float)(mass * Constants.c2 / System.Math.Sqrt(1.0 - (momentum / mass).LengthSquared() / (Constants.c2))); //TODO: plus potential
+                return (float)(mass * Constants.c2 / Math.Sqrt(1.0 - (momentum / mass).LengthSquared() / (Constants.c2))); //TODO: plus potential
             else
                 return momentum.Length() * Constants.c;
         }
@@ -32,7 +32,7 @@ namespace Potential
         public float AngularVelocity { get; private set; } = 0.0f;
         public Vector3 Force { get; private set; }
 
-        private List<(UInt64, Func<Particle, Particle, Vector3>)> InterParticleForces = new List<(UInt64, Func<Particle, Particle, Vector3>)>();
+        private List<(ulong, Func<Particle, Particle, Vector3>)> InterParticleForces = new List<(ulong, Func<Particle, Particle, Vector3>)>();
         public Tracer ParticleTracer { get; set; } = null;
         public Particle(Texture2D texture, Vector3 position, Vector3 velocity, float radius = 10.0f, float mass = 0, float charge = 0, float energy = -1.0f, float rotation = 0.0f, float angular_velocity = 0.0f, bool isfixed = false)
         {
@@ -66,7 +66,7 @@ namespace Potential
             }
         }
 
-        private Particle(UInt64? id, Texture2D texture, Vector3 position, Vector3 velocity, float radius = 10.0f, float mass = 0, float charge = 0, float energy = -1.0f, float rotation = 0.0f, float angular_velocity = 0.0f, bool isfixed = false)
+        private Particle(ulong? id, Texture2D texture, Vector3 position, Vector3 velocity, float radius = 10.0f, float mass = 0, float charge = 0, float energy = -1.0f, float rotation = 0.0f, float angular_velocity = 0.0f, bool isfixed = false)
         {
             ID = id;
             Texture = texture;
@@ -97,14 +97,14 @@ namespace Potential
             }
         }
 
-        public Utilities.ErrorCodes Draw(SpriteBatch batch)
+        public ErrorCodes Draw(SpriteBatch batch)
         {
             if (Texture == null)
-                return Utilities.ErrorCodes.FAILURE;
+                return ErrorCodes.FAILURE;
             batch.Draw(Texture, new Vector2(Position.X, Position.Y), origin: Origin, rotation: Rotation, scale: Scale, color: Color.White);
             if (ParticleTracer != null && GameState.GetState().Flags.Contains(GameState.UIFlags.TRACERS_ON))
                 ParticleTracer.Draw(batch);
-            return Utilities.ErrorCodes.SUCCESS;
+            return ErrorCodes.SUCCESS;
         }
         private void ApplyForce(GameTime time)
         {
@@ -122,14 +122,14 @@ namespace Potential
             Energy = RelativisticEnergy(Mass, Momentum);
             Position += dt * Velocity;
         }
-        public void AddInterParticleForce(UInt64? particle_id, Func<Particle, Particle, Vector3> force)
+        public void AddInterParticleForce(ulong? particle_id, Func<Particle, Particle, Vector3> force)
         {
             if (particle_id.HasValue && particle_id < ParticleCounter)
             {
                 InterParticleForces.Add((particle_id.Value, force));
             }
         }
-        public void RemoveInterParticleForce(UInt64 position)
+        public void RemoveInterParticleForce(ulong position)
         {
             if (InterParticleForces.Count() > (int)position)
             {
@@ -172,26 +172,23 @@ namespace Potential
                     var r = p.Position - Position;
                     if (r.Length() > Constants.MinClassicalR)
                     {
-                        var R3 = (float)System.Math.Pow(r.Length(), 3);
+                        var R3 = (float)Math.Pow(r.Length(), 3);
                         var R = r / R3;
-                        return ((Mass * p.Mass) * Constants.G - (Charge * p.Charge) / (float)(4 * System.Math.PI * Constants.Epsilon0)) * R;
+                        return (Mass * p.Mass * Constants.G - Charge * p.Charge / (float)(4 * Math.PI * Constants.Epsilon0)) * R;
                     }
-                    else
-                    {
-                        return Vector3.Zero;
-                    }
+                    return Vector3.Zero;
 
                 }
                 return Vector3.Zero;
             }).Aggregate((x, y) => x + y);
         }
-        public Utilities.ErrorCodes Update(GameTime time, World world, GameState state, object args = null)
+        public ErrorCodes Update(GameTime time, World world, GameState state, object args = null)
         {
             //TODO: add collisions
             Rotation += (float)time.ElapsedGameTime.TotalSeconds * AngularVelocity;
             if (IsFixed)
             {
-                return Utilities.ErrorCodes.SUCCESS;
+                return ErrorCodes.SUCCESS;
             }
             //TODO: update forces felt by particle from other particles and fields
             Force = Vector3.Zero;
@@ -200,7 +197,7 @@ namespace Potential
             ApplyForce(time);
             if (ParticleTracer != null && GameState.GetState().Flags.Contains(GameState.UIFlags.TRACERS_ON))
                 ParticleTracer.Update(time, world, state, this);
-            return Utilities.ErrorCodes.SUCCESS;
+            return ErrorCodes.SUCCESS;
         }
 
         public object Clone()
