@@ -6,6 +6,23 @@ using Potential.Utilities;
 using System.Collections.Generic;
 namespace Potential
 {
+    public class ParticleParams
+    {
+        public Texture2D Texture { get; set; } = null;
+        public float Mass { get; set; } = 0;
+        public float Charge { get; set; } = 0;
+        public float Radius { get; set; } = 0;
+        public Vector3 Position { get; set; } = Vector3.Zero;
+        public Vector3 Velocity { get; set; } = Vector3.Zero;
+        public void Update(float? mass, float? charge = null, float? radius = null, Vector3? position = null, Vector3? velocity = null)
+        {
+            Mass = mass ?? Mass;
+            Charge = charge ?? Charge;
+            Radius = radius ?? Radius;
+            Position = position ?? Position;
+            Velocity = velocity ?? Velocity;
+        }
+    }
     public class Particle : GameObject
     {
         private static ulong ParticleCounter = 0;
@@ -15,6 +32,10 @@ namespace Potential
                 return (float)(mass * Constants.c2 / Math.Sqrt(1.0 - (momentum / mass).LengthSquared() / (Constants.c2))); //TODO: plus potential
             else
                 return momentum.Length() * Constants.c;
+        }
+        public static Particle FromParams(ParticleParams parameters)
+        {
+            return new Particle(parameters.Texture, parameters.Position, parameters.Velocity, parameters.Radius, parameters.Mass, parameters.Charge);
         }
         public UInt64? ID { get; private set; } = null;
         public Vector2 Origin { get; set; }

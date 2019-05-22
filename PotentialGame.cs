@@ -16,7 +16,7 @@ namespace Potential
         private SpriteFont Font = null;
         private Color ColorFG = Color.White;
         private Color ColorBG = Color.Black;
-        private World GameWorld = new World();
+        private World GameWorld = null;
         private MouseCursor mouseCursor;
         GameState State;
         GraphicsDeviceManager graphics;
@@ -46,6 +46,7 @@ namespace Potential
         protected override void Initialize()
         {
             LoadContent();
+            GameWorld = new World(Textures);
             mouseCursor = MouseCursor.FromTexture2D(Textures["cursor"],
                 Textures["cursor"].Width / 2, Textures["cursor"].Height / 2);
             Mouse.SetCursor(mouseCursor);
@@ -87,12 +88,14 @@ namespace Potential
             {
                 Mouse.SetCursor(mouseCursor);
             }
-            State.Update(Keyboard.GetState(), Mouse.GetState(), gameTime, GameWorld, null);
+            State.Update(Keyboard.GetState(), Mouse.GetState(), ref GameWorld, gameTime, null);
             if (!State.IsPaused)
             {
-                World newWorld = (World)GameWorld.Clone();
-                newWorld.Update(gameTime, GameWorld);
-                GameWorld = newWorld;
+                //TODO: should this be cloned here?
+                // World newWorld = (World)GameWorld.Clone();
+                // newWorld.Update(gameTime, GameWorld);
+                // GameWorld = newWorld;
+                GameWorld.Update(gameTime);
                 base.Update(gameTime);
             }
         }

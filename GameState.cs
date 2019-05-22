@@ -10,22 +10,6 @@ namespace Potential
     using Utilities;
     public class GameState
     {
-        private class ParamValues
-        {
-            public float Mass { get; set; } = 0;
-            public float Charge { get; set; } = 0;
-            public float Radius { get; set; } = 0;
-            public Vector3 Position { get; set; } = Vector3.Zero;
-            public Vector3 Velocity { get; set; } = Vector3.Zero;
-            public void Update(float? mass, float? charge = null, float? radius = null, Vector3? position = null, Vector3? velocity = null)
-            {
-                Mass = mass ?? Mass;
-                Charge = charge ?? Charge;
-                Radius = radius ?? Radius;
-                Position = position ?? Position;
-                Velocity = velocity ?? Velocity;
-            }
-        }
         public enum Param
         {
             MASS = 0,
@@ -56,7 +40,7 @@ namespace Potential
         private Keys? LastPressed { get; set; } = null;
         private MouseButtonCode? LastClicked { get; set; } = null;
         private Param ParamSelected { get; set; } = Param.MASS;
-        private ParamValues paramValues { get; set; } = new ParamValues();
+        private ParticleParams paramValues { get; set; } = new ParticleParams();
         public HashSet<UIFlags> Flags { get; private set; } = new HashSet<UIFlags>();
         public bool IsPaused { get => Flags.Contains(UIFlags.PAUSED); }
         public static GameState state;
@@ -180,7 +164,7 @@ namespace Potential
                 LastPressed = key;
             }
         }
-        public ErrorCodes Update(KeyboardState keyboardState, MouseState mouseState, GameTime time = null, World world = null, GameState state = null)
+        public ErrorCodes Update(KeyboardState keyboardState, MouseState mouseState, ref World world, GameTime time = null, GameState state = null)
         {
             KeyPress(keyboardState, Keys.Space, () =>
             {
@@ -233,6 +217,17 @@ namespace Potential
                 }
                 return ErrorCodes.SUCCESS;
             });
+            if (keyboardState.IsKeyUp(Keys.Enter) && LastPressed.HasValue && LastPressed.Value == Keys.Enter)
+            {
+                paramValues.Texture = world.Textures["moon"];
+                paramValues.Radius = 20.0F;
+                world.AddParticle(Particle.FromParams(paramValues));
+                LastPressed = null;
+            }
+            else if (keyboardState.IsKeyDown(Keys.Enter))
+            {
+                LastPressed = Keys.Enter;
+            }
             MouseClick(mouseState, MouseButtonCode.LEFT, () =>
             {
                 paramValues.Position = new Vector3(mouseState.X, mouseState.Y, 0);

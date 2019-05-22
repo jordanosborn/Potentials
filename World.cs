@@ -10,8 +10,10 @@ namespace Potential
     {
         public List<Field> IntrinsicFields { get; set; }
         public List<Particle> Particles { get; set; }
-        public World()
+        public Dictionary<string, Texture2D> Textures { get; set; } = null;
+        public World(Dictionary<string, Texture2D> textures)
         {
+            Textures = textures;
             IntrinsicFields = new List<Field>();
             Particles = new List<Particle>();
         }
@@ -72,7 +74,7 @@ namespace Potential
         }
         public object Clone()
         {
-            var world = new World();
+            var world = new World(Textures);
             world.Particles = (List<Particle>)Particles.Clone();
             world.IntrinsicFields = (List<Field>)IntrinsicFields.Clone();
             return world;
