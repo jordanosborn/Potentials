@@ -211,6 +211,28 @@ namespace Potential
                 ParamSelected = (Param)(((int)ParamSelected + 1) % (ParameterCount));
                 return ErrorCodes.SUCCESS;
             });
+            KeyPress(keyboardState, Keys.Back, () =>
+            {
+                switch (ParamSelected)
+                {
+                    case Param.MASS:
+                        paramValues.Mass = 0;
+                        break;
+                    case Param.CHARGE:
+                        paramValues.Charge = 0;
+                        break;
+                    case Param.RADIUS:
+                        paramValues.Radius = 0;
+                        break;
+                    case Param.POSITION:
+                        paramValues.Position = Vector3.Zero;
+                        break;
+                    case Param.VELOCITY:
+                        paramValues.Velocity = Vector3.Zero;
+                        break;
+                }
+                return ErrorCodes.SUCCESS;
+            });
             MouseClick(mouseState, MouseButtonCode.LEFT, () =>
             {
                 paramValues.Position = new Vector3(mouseState.X, mouseState.Y, 0);
