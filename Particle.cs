@@ -8,10 +8,39 @@ namespace Potential
 {
     public class ParticleParams
     {
+        public enum Param
+        {
+            MASS = 0,
+            CHARGE = 1,
+            RADIUS = 2,
+            POSITION = 3,
+            VELOCITY = 4,
+        }
+        public void ResetParam(Param p)
+        {
+            switch (p)
+            {
+                case Param.MASS:
+                    Mass = 100;
+                    break;
+                case Param.CHARGE:
+                    Charge = 0;
+                    break;
+                case Param.RADIUS:
+                    Radius = 20;
+                    break;
+                case Param.POSITION:
+                    Position = Vector3.Zero;
+                    break;
+                case Param.VELOCITY:
+                    Velocity = Vector3.Zero;
+                    break;
+            }
+        }
         public Texture2D Texture { get; set; } = null;
-        public float Mass { get; set; } = 0;
+        public float Mass { get; set; } = 100;
         public float Charge { get; set; } = 0;
-        public float Radius { get; set; } = 0;
+        public float Radius { get; set; } = 20;
         public Vector3 Position { get; set; } = Vector3.Zero;
         public Vector3 Velocity { get; set; } = Vector3.Zero;
         public void Update(float? mass, float? charge = null, float? radius = null, Vector3? position = null, Vector3? velocity = null)

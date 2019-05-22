@@ -88,7 +88,6 @@ namespace Potential
             {
                 Mouse.SetCursor(mouseCursor);
             }
-            State.Update(Keyboard.GetState(), Mouse.GetState(), ref GameWorld, gameTime, null);
             if (!State.IsPaused)
             {
                 //TODO: should this be cloned here?
@@ -98,6 +97,7 @@ namespace Potential
                 GameWorld.Update(gameTime);
                 base.Update(gameTime);
             }
+            State.Update(Keyboard.GetState(), Mouse.GetState(), ref GameWorld, gameTime, null);
         }
 
         protected override void Draw(GameTime gameTime)
@@ -110,7 +110,7 @@ namespace Potential
                 scale: new Vector2(Window.ClientBounds.Width / (float)bg.Width, Window.ClientBounds.Height / (float)bg.Height)
             );
             GameWorld.Draw(spriteBatch);
-            State.Draw(spriteBatch, Window);
+            State.Draw(spriteBatch, GameWorld, Window);
             spriteBatch.End();
             base.Draw(gameTime);
         }

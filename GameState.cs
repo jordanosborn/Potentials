@@ -10,14 +10,7 @@ namespace Potential
     using Utilities;
     public class GameState
     {
-        public enum Param
-        {
-            MASS = 0,
-            CHARGE = 1,
-            RADIUS = 2,
-            POSITION = 3,
-            VELOCITY = 4,
-        }
+
         public enum UIFlags
         {
             TRACERS_ON,
@@ -25,7 +18,7 @@ namespace Potential
             FPS_ON,
             MOUSE_LOCATION_ON
         }
-        private static int ParameterCount = (Enum.GetValues(typeof(Param))).Length;
+        private static int ParameterCount = (Enum.GetValues(typeof(ParticleParams.Param))).Length;
         public enum MouseButtonCode
         {
             LEFT,
@@ -39,7 +32,7 @@ namespace Potential
         readonly Vector2 SelectedPosition = new Vector2(4, 20);
         private Keys? LastPressed { get; set; } = null;
         private MouseButtonCode? LastClicked { get; set; } = null;
-        private Param ParamSelected { get; set; } = Param.MASS;
+        private ParticleParams.Param ParamSelected { get; set; } = ParticleParams.Param.MASS;
         private ParticleParams paramValues { get; set; } = new ParticleParams();
         public HashSet<UIFlags> Flags { get; private set; } = new HashSet<UIFlags>();
         public bool IsPaused { get => Flags.Contains(UIFlags.PAUSED); }
@@ -79,19 +72,19 @@ namespace Potential
             string filterText;
             switch (ParamSelected)
             {
-                case Param.MASS:
+                case ParticleParams.Param.MASS:
                     filterText = "Mass";
                     break;
-                case Param.CHARGE:
+                case ParticleParams.Param.CHARGE:
                     filterText = "Charge";
                     break;
-                case Param.RADIUS:
+                case ParticleParams.Param.RADIUS:
                     filterText = "Radius";
                     break;
-                case Param.POSITION:
+                case ParticleParams.Param.POSITION:
                     filterText = "Position";
                     break;
-                case Param.VELOCITY:
+                case ParticleParams.Param.VELOCITY:
                     filterText = "Velocity";
                     break;
                 default:
@@ -104,9 +97,10 @@ namespace Potential
             batch.DrawString(Font, selectedText, SelectedPosition, Color.Green);
         }
 
-        public ErrorCodes Draw(SpriteBatch batch, GameWindow window = null)
+        public ErrorCodes Draw(SpriteBatch batch, World world, GameWindow window = null)
         {
             var TextUI = new List<string>();
+            TextUI.Add($"Particles: {world.Particles.Count()}");
             if (Flags.Contains(UIFlags.FPS_ON))
             {
                 TextUI.Add($"{Math.Round(FPS.Framerate, 0)}FPS");
@@ -192,35 +186,17 @@ namespace Potential
             });
             KeyPress(keyboardState, Keys.Tab, () =>
             {
-                ParamSelected = (Param)(((int)ParamSelected + 1) % (ParameterCount));
+                ParamSelected = (ParticleParams.Param)(((int)ParamSelected + 1) % (ParameterCount));
                 return ErrorCodes.SUCCESS;
             });
             KeyPress(keyboardState, Keys.Back, () =>
             {
-                switch (ParamSelected)
-                {
-                    case Param.MASS:
-                        paramValues.Mass = 0;
-                        break;
-                    case Param.CHARGE:
-                        paramValues.Charge = 0;
-                        break;
-                    case Param.RADIUS:
-                        paramValues.Radius = 0;
-                        break;
-                    case Param.POSITION:
-                        paramValues.Position = Vector3.Zero;
-                        break;
-                    case Param.VELOCITY:
-                        paramValues.Velocity = Vector3.Zero;
-                        break;
-                }
+                paramValues.ResetParam(ParamSelected);
                 return ErrorCodes.SUCCESS;
             });
             if (keyboardState.IsKeyUp(Keys.Enter) && LastPressed.HasValue && LastPressed.Value == Keys.Enter)
             {
                 paramValues.Texture = world.Textures["moon"];
-                paramValues.Radius = 20.0F;
                 world.AddParticle(Particle.FromParams(paramValues));
                 LastPressed = null;
             }

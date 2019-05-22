@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Potential.Utilities
 {
+    //TODO: adjust these
     public static class Constants
     {
         public static float G = 1.0f;
         public static float Epsilon0 = 1.0f;
-        public static float c = 10.0f;
+        public static float c = 50.0f;
         public static float c2 = (float)Math.Pow(c, 2);
         public static float MinClassicalR = 3.0f;
     }
