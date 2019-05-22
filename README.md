@@ -24,6 +24,24 @@ Potentials Tower Defense Game!
         Y - Edit Y Velocity
         Z - Edit Z Velocity
     0-9 . - Edit Parameter Value
-    
+### TODO:
+1. Improve integration method
+1. Speed enhancements (world segmentation)
+1. Ability to select, modify and delete existing particles.
+1. More forces in factory
+1. Ability to modify velocity with mouse drag or numbers (draw arrow).
+1. Modify and set more parameters.
+1. Only allow modification when sim is paused
+1. Reverse time.
+1. Save set up, Load set up
+1. More object types (walls etc)
+1. Collisions, absorbing breakup, particle decay.
+1. Pan, Rotate and Zoom view
+1. Packaging
+1. Mobile Versions
+1. Implement gameplay
+1. UI improvements (Pause Menu)
+1. Constrain field.
+1. 3D
     
     
