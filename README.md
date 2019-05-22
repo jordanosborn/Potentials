@@ -40,6 +40,7 @@ Potentials Tower Defense Game!
 1. More object types (walls etc)
 1. Collisions, absorbing, breakup, particle decay.
 1. Pan, Rotate and Zoom view
+1. Rotation and spin vectors
 1. Packaging
 1. Mobile Versions
 1. Implement gameplay
