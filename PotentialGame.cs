@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Potential
 {
@@ -48,16 +49,16 @@ namespace Potential
             mouseCursor = MouseCursor.FromTexture2D(Textures["cursor"],
                 Textures["cursor"].Width / 2, Textures["cursor"].Height / 2);
             Mouse.SetCursor(mouseCursor);
-            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 200, 0),
+            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(400, 400, 0),
                 new Vector3(0, -50, 0), 50, mass: 0, angular_velocity: -0.8f, isfixed: false));
             GameWorld.Particles[0].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[0], color: Color.Red);
-            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(200, 200, 0),
+            GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(400, 400, 0),
                 new Vector3(0, 50, 0), 50, mass: 0));
             GameWorld.Particles[1].ParticleTracer = new Tracer(Textures["tracer"], GameWorld.Particles[1], color: Color.Blue);
-            // GameWorld.Particles[1].AddInterParticleForceSymmetric(
-            //     GameWorld.Particles[0],
-            //     ForceFactory.ForceFactory.SpringForce(0.001f, 10.0f)
-            // );
+            GameWorld.Particles[1].AddInterParticleForceSymmetric(
+            GameWorld.Particles[0],
+            Force.Factory.SpringForce(0.001f, 0.0f)
+            );
             base.Initialize();
         }
 
@@ -75,17 +76,18 @@ namespace Potential
 
         protected override void Update(GameTime gameTime)
         {
+            ButtonState[] MouseButtonStates = { Mouse.GetState().LeftButton, Mouse.GetState().MiddleButton, Mouse.GetState().RightButton };
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (MouseButtonStates.Any((b) => b == ButtonState.Pressed))
             {
                 Mouse.SetCursor(MouseCursor.Crosshair);
             }
-            else if (Mouse.GetState().LeftButton == ButtonState.Released)
+            else if (MouseButtonStates.Any((b) => b == ButtonState.Released))
             {
                 Mouse.SetCursor(mouseCursor);
             }
-            State.Update(gameTime, GameWorld, null, Keyboard.GetState());
+            State.Update(Keyboard.GetState(), Mouse.GetState(), gameTime, GameWorld, null);
             if (!State.IsPaused)
             {
                 World newWorld = (World)GameWorld.Clone();

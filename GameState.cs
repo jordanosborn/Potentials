@@ -2,9 +2,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+
 using System;
 namespace Potential
 {
+    using Utilities;
     public class GameState
     {
         public enum UIFlags
@@ -12,13 +14,20 @@ namespace Potential
             TRACERS_ON,
             PAUSED,
             FPS_ON,
-            MOUSE_LOCATION_ON,
+            MOUSE_LOCATION_ON
+        }
+        public enum MouseButtonCode
+        {
+            LEFT,
+            RIGHT,
+            MIDDLE
         }
         private Color ColorFG = Color.White;
         private Color ColorBG = Color.Black;
         private SpriteFont Font { get; set; } = null;
         Utilities.SmartFramerate FPS = new Utilities.SmartFramerate(5, (4, 0));
         private Keys? LastPressed { get; set; } = null;
+        private MouseButtonCode? LastClicked { get; set; } = null;
         public HashSet<UIFlags> Flags { get; private set; } = new HashSet<UIFlags>();
         public bool IsPaused { get => Flags.Contains(UIFlags.PAUSED); }
         public static GameState state = null;
@@ -29,7 +38,7 @@ namespace Potential
             {
                 if (font == null)
                 {
-                    throw new System.ArgumentNullException();
+                    throw new ArgumentNullException();
                 }
                 state = new GameState(font);
             }
@@ -46,12 +55,12 @@ namespace Potential
             Flags.Add(UIFlags.TRACERS_ON);
         }
 
-        public Utilities.ErrorCodes Draw(SpriteBatch batch, GameWindow window = null)
+        public ErrorCodes Draw(SpriteBatch batch, GameWindow window = null)
         {
             var TextUI = new List<string>();
             if (Flags.Contains(UIFlags.FPS_ON))
             {
-                TextUI.Add($"{System.Math.Round(FPS.Framerate, 0)}FPS");
+                TextUI.Add($"{Math.Round(FPS.Framerate, 0)}FPS");
             }
             if (Flags.Contains(UIFlags.MOUSE_LOCATION_ON))
             {
@@ -75,24 +84,39 @@ namespace Potential
             }
             var s = string.Join("    ", TextUI);
             batch.DrawString(Font, s, FPS.Position, ColorFG);
-            return Utilities.ErrorCodes.SUCCESS;
+            return ErrorCodes.SUCCESS;
         }
-        private void KeyPress(KeyboardState pressed, Keys key, Func<Utilities.ErrorCodes> f)
+        private ErrorCodes MouseClick(MouseState pressed, MouseButtonCode button, Func<ErrorCodes> func)
+        {
+            var clicked = (button == MouseButtonCode.LEFT) ? pressed.LeftButton : (button == MouseButtonCode.RIGHT) ? pressed.RightButton : pressed.MiddleButton;
+
+            if (clicked == ButtonState.Released && LastClicked.HasValue && LastClicked.Value == button)
+            {
+                func();
+                LastClicked = null;
+            }
+            else if (clicked == ButtonState.Pressed)
+            {
+                LastClicked = button;
+            }
+            return ErrorCodes.SUCCESS;
+        }
+
+        private void KeyPress(KeyboardState pressed, Keys key, Func<ErrorCodes> func)
         {
             if (pressed.IsKeyUp(key) && LastPressed.HasValue && LastPressed.Value == key)
             {
-                f();
+                func();
                 LastPressed = null;
             }
-            if (pressed.IsKeyDown(key))
+            else if (pressed.IsKeyDown(key))
             {
                 LastPressed = key;
             }
         }
-        public Utilities.ErrorCodes Update(GameTime time = null, World world = null, GameState state = null, object keyboard_state = null)
+        public ErrorCodes Update(KeyboardState keyboardState, MouseState mouseState, GameTime time = null, World world = null, GameState state = null)
         {
-            var pressed = ((KeyboardState)keyboard_state);
-            KeyPress(pressed, Keys.Space, () =>
+            KeyPress(keyboardState, Keys.Space, () =>
             {
                 if (Flags.Contains(UIFlags.PAUSED))
                 {
@@ -102,9 +126,9 @@ namespace Potential
                 {
                     Flags.Add(UIFlags.PAUSED);
                 }
-                return Utilities.ErrorCodes.SUCCESS;
+                return ErrorCodes.SUCCESS;
             });
-            KeyPress(pressed, Keys.T, () =>
+            KeyPress(keyboardState, Keys.T, () =>
             {
                 if (Flags.Contains(UIFlags.TRACERS_ON))
                 {
@@ -114,15 +138,21 @@ namespace Potential
                 {
                     Flags.Add(UIFlags.TRACERS_ON);
                 }
-                return Utilities.ErrorCodes.SUCCESS;
+                return ErrorCodes.SUCCESS;
             });
+            MouseClick(mouseState, MouseButtonCode.LEFT, () =>
+            {
+                Console.WriteLine($"{mouseState.X}, {mouseState.Y}");
+                return ErrorCodes.SUCCESS;
+            });
+
 
             FPS.Update(time);
             return Utilities.ErrorCodes.SUCCESS;
         }
         public object Clone()
         {
-            return GameState.state;
+            return state;
         }
 
     }

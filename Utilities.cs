@@ -30,14 +30,14 @@ namespace Potential.Utilities
         {
             get
             {
-                return (currentFrametimes != 0) ? (numerator / currentFrametimes) : 0;
+                return (Math.Abs(currentFrametimes) > float.Epsilon) ? (numerator / currentFrametimes) : 0;
             }
         }
 
         public SmartFramerate(int oldFrameWeight, (int, int) position)
         {
             numerator = oldFrameWeight;
-            weight = (double)oldFrameWeight / ((double)oldFrameWeight - 1d);
+            weight = oldFrameWeight / (oldFrameWeight - 1d);
             Position = new Vector2(position.Item1, position.Item2);
         }
 
@@ -48,7 +48,7 @@ namespace Potential.Utilities
             currentFrametimes += timeSinceLastFrame;
         }
     }
-    public static class Math
+    public static class MathUtils
     {
         public static Vector3 Derivative(Field f, Vector3 position, Vector3 orientation, float h = 0.001f)
         {
