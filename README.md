@@ -27,7 +27,9 @@ Potentials Tower Defense Game!
 ### TODO:
 1. Improve integration method
 1. Speed enhancements (world segmentation)
-1. Ability to select, modify and delete existing particles.
+1. Ability to select, modify and delete existing particles.  Give distinguishing feature say white bouding box
+1. Improve cursor click animation
+1. More textures
 1. More forces in factory
 1. Ability to modify velocity with mouse drag or numbers (draw arrow).
 1. Modify and set more parameters.
