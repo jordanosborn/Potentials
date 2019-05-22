@@ -11,64 +11,64 @@ namespace Potential
     public class GameState
     {
 
-        public enum UIFlags
+        public enum UiFlags
         {
             TRACERS_ON,
             PAUSED,
             FPS_ON,
             MOUSE_LOCATION_ON
         }
-        private static int ParameterCount = (Enum.GetValues(typeof(ParticleParams.Param))).Length;
-        public enum MouseButtonCode
+        private static readonly int ParameterCount = Enum.GetValues(typeof(ParticleParams.Param)).Length;
+        private enum MouseButtonCode
         {
             LEFT,
             RIGHT,
             MIDDLE
         }
-        private Color ColorFG = Color.White;
-        private Color ColorBG = Color.Black;
-        private SpriteFont Font { get; set; } = null;
-        readonly SmartFramerate FPS = new SmartFramerate(5, (4, 0));
-        readonly Vector2 SelectedPosition = new Vector2(4, 20);
-        private Keys? LastPressed { get; set; } = null;
-        private MouseButtonCode? LastClicked { get; set; } = null;
+        private readonly Color ColorFg = Color.White;
+        private Color ColorBg = Color.Black;
+        private SpriteFont Font { get; set; }
+        private readonly SmartFramerate Fps = new SmartFramerate(5, (4, 0));
+        private readonly Vector2 SelectedPosition = new Vector2(4, 20);
+        private Keys? LastPressed { get; set; }
+        private MouseButtonCode? LastClicked { get; set; }
         private ParticleParams.Param ParamSelected { get; set; } = ParticleParams.Param.MASS;
-        private ParticleParams paramValues { get; set; } = new ParticleParams();
-        public HashSet<UIFlags> Flags { get; private set; } = new HashSet<UIFlags>();
-        public bool IsPaused { get => Flags.Contains(UIFlags.PAUSED); }
-        public static GameState state;
+        private ParticleParams ParamValues { get; set; } = new ParticleParams();
+        public HashSet<UiFlags> Flags { get; private set; } = new HashSet<UiFlags>();
+        public bool IsPaused { get => Flags.Contains(UiFlags.PAUSED); }
+        private static GameState _state;
 
         public static GameState GetState(SpriteFont font = null)
         {
-            if (state == null)
+            if (_state == null)
             {
                 if (font == null)
                 {
                     throw new ArgumentNullException();
                 }
-                state = new GameState(font);
+                _state = new GameState(font);
             }
 
-            return state;
+            return _state;
 
         }
         private GameState(SpriteFont font)
         {
             Font = font;
-            Flags.Add(UIFlags.PAUSED);
-            Flags.Add(UIFlags.FPS_ON);
-            Flags.Add(UIFlags.MOUSE_LOCATION_ON);
-            Flags.Add(UIFlags.TRACERS_ON);
+            Flags.Add(UiFlags.PAUSED);
+            Flags.Add(UiFlags.FPS_ON);
+            Flags.Add(UiFlags.MOUSE_LOCATION_ON);
+            Flags.Add(UiFlags.TRACERS_ON);
         }
 
-        private void DrawParamUI(SpriteBatch batch, Vector2 location)
+        private void DrawParamUi(SpriteBatch batch, Vector2 location)
         {
-            var TextUI = new List<string>();
-            TextUI.Add($"Mass: {paramValues.Mass}");
-            TextUI.Add($"Charge: {paramValues.Charge}");
-            TextUI.Add($"Radius: {paramValues.Radius}");
-            TextUI.Add($"Position: {paramValues.Position}");
-            TextUI.Add($"Velocity: {paramValues.Velocity}");
+            var textUi = new List<string>();
+            textUi.Add($"Mass: {ParamValues.Mass}");
+            textUi.Add($"Charge: {ParamValues.Charge}");
+            textUi.Add($"Radius: {ParamValues.Radius}");
+            textUi.Add($"Position: {ParamValues.Position}");
+            textUi.Add($"Velocity: {ParamValues.Velocity}");
             string filterText;
             switch (ParamSelected)
             {
@@ -91,9 +91,9 @@ namespace Potential
                     filterText = "";
                     break;
             }
-            string selectedText = string.Join("    ", TextUI.Where((s) => s.Contains(filterText)).ToList());
-            string unselectedText = string.Join("    ", TextUI.Where((s) => !s.Contains(filterText)).ToList());
-            batch.DrawString(Font, unselectedText, location, ColorFG);
+            var selectedText = string.Join("    ", textUi.Where((s) => s.Contains(filterText)).ToList());
+            var unselectedText = string.Join("    ", textUi.Where((s) => !s.Contains(filterText)).ToList());
+            batch.DrawString(Font, unselectedText, location, ColorFg);
             batch.DrawString(Font, selectedText, SelectedPosition, Color.Green);
         }
 
@@ -101,11 +101,11 @@ namespace Potential
         {
             var TextUI = new List<string>();
             TextUI.Add($"Particles: {world.Particles.Count()}");
-            if (Flags.Contains(UIFlags.FPS_ON))
+            if (Flags.Contains(UiFlags.FPS_ON))
             {
-                TextUI.Add($"{Math.Round(FPS.Framerate, 0)}FPS");
+                TextUI.Add($"{Math.Round(Fps.Framerate, 0)}FPS");
             }
-            if (Flags.Contains(UIFlags.MOUSE_LOCATION_ON))
+            if (Flags.Contains(UiFlags.MOUSE_LOCATION_ON))
             {
                 var mouse_state = Mouse.GetState();
                 int X = mouse_state.X, Y = mouse_state.Y;
@@ -117,17 +117,17 @@ namespace Potential
                 }
                 TextUI.Add($"({X}, {Y})");
             }
-            if (Flags.Contains(UIFlags.PAUSED))
+            if (Flags.Contains(UiFlags.PAUSED))
             {
                 TextUI.Add("PAUSED");
             }
-            if (!Flags.Contains(UIFlags.TRACERS_ON))
+            if (!Flags.Contains(UiFlags.TRACERS_ON))
             {
                 TextUI.Add("Tracers: OFF");
             }
             var s = string.Join("    ", TextUI);
-            batch.DrawString(Font, s, FPS.Position, ColorFG);
-            DrawParamUI(batch, new Vector2(4, window.ClientBounds.Height - 20));
+            batch.DrawString(Font, s, Fps.Position, ColorFg);
+            DrawParamUi(batch, new Vector2(4, window.ClientBounds.Height - 20));
             return ErrorCodes.SUCCESS;
         }
         private ErrorCodes MouseClick(MouseState pressed, MouseButtonCode button, Func<ErrorCodes> func)
@@ -162,25 +162,25 @@ namespace Potential
         {
             KeyPress(keyboardState, Keys.Space, () =>
             {
-                if (Flags.Contains(UIFlags.PAUSED))
+                if (Flags.Contains(UiFlags.PAUSED))
                 {
-                    Flags.Remove(UIFlags.PAUSED);
+                    Flags.Remove(UiFlags.PAUSED);
                 }
                 else
                 {
-                    Flags.Add(UIFlags.PAUSED);
+                    Flags.Add(UiFlags.PAUSED);
                 }
                 return ErrorCodes.SUCCESS;
             });
             KeyPress(keyboardState, Keys.T, () =>
             {
-                if (Flags.Contains(UIFlags.TRACERS_ON))
+                if (Flags.Contains(UiFlags.TRACERS_ON))
                 {
-                    Flags.Remove(UIFlags.TRACERS_ON);
+                    Flags.Remove(UiFlags.TRACERS_ON);
                 }
                 else
                 {
-                    Flags.Add(UIFlags.TRACERS_ON);
+                    Flags.Add(UiFlags.TRACERS_ON);
                 }
                 return ErrorCodes.SUCCESS;
             });
@@ -191,13 +191,13 @@ namespace Potential
             });
             KeyPress(keyboardState, Keys.Back, () =>
             {
-                paramValues.ResetParam(ParamSelected);
+                ParamValues.ResetParam(ParamSelected);
                 return ErrorCodes.SUCCESS;
             });
             if (keyboardState.IsKeyUp(Keys.Enter) && LastPressed.HasValue && LastPressed.Value == Keys.Enter)
             {
-                paramValues.Texture = world.Textures["moon"];
-                world.AddParticle(Particle.FromParams(paramValues));
+                ParamValues.Texture = world.Textures["moon"];
+                world.AddParticle(Particle.FromParams(ParamValues));
                 LastPressed = null;
             }
             else if (keyboardState.IsKeyDown(Keys.Enter))
@@ -206,17 +206,17 @@ namespace Potential
             }
             MouseClick(mouseState, MouseButtonCode.LEFT, () =>
             {
-                paramValues.Position = new Vector3(mouseState.X, mouseState.Y, 0);
+                ParamValues.Position = new Vector3(mouseState.X, mouseState.Y, 0);
                 return ErrorCodes.SUCCESS;
             });
 
 
-            FPS.Update(time);
+            Fps.Update(time);
             return ErrorCodes.SUCCESS;
         }
         public object Clone()
         {
-            return state;
+            return _state;
         }
 
     }

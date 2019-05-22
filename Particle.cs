@@ -52,7 +52,7 @@ namespace Potential
             Velocity = velocity ?? Velocity;
         }
     }
-    public class Particle : GameObject
+    public class Particle : IGameObject
     {
         private static ulong ParticleCounter = 0;
         public static float RelativisticEnergy(float mass, Vector3 momentum)
@@ -152,7 +152,7 @@ namespace Potential
             if (Texture == null)
                 return ErrorCodes.FAILURE;
             batch.Draw(Texture, new Vector2(Position.X, Position.Y), origin: Origin, rotation: Rotation, scale: Scale, color: Color.White);
-            if (ParticleTracer != null && GameState.GetState().Flags.Contains(GameState.UIFlags.TRACERS_ON))
+            if (ParticleTracer != null && GameState.GetState().Flags.Contains(GameState.UiFlags.TRACERS_ON))
                 ParticleTracer.Draw(batch);
             return ErrorCodes.SUCCESS;
         }
@@ -245,7 +245,7 @@ namespace Potential
             Force += GravityAndElectrostatic(world);
             Force += ApplyInterParticleForces(world);
             ApplyForce(time);
-            if (ParticleTracer != null && GameState.GetState().Flags.Contains(GameState.UIFlags.TRACERS_ON))
+            if (ParticleTracer != null && GameState.GetState().Flags.Contains(GameState.UiFlags.TRACERS_ON))
                 ParticleTracer.Update(time, world, state, this);
             return ErrorCodes.SUCCESS;
         }

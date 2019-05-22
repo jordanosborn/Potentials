@@ -5,12 +5,12 @@ namespace Potential
 {
     using Utilities;
 
-    public interface Field : GameObject
+    public interface IField : IGameObject
     {
         float Value<T>(T particle) where T : Particle;
         float Value(Vector3 position);
     }
-    enum CombineBy
+    internal enum CombineBy
     {
         ADDITION,
         SUBTRACTION,
@@ -18,9 +18,9 @@ namespace Potential
         DIVISION,
         EXPONENTIATION
     }
-    public class UniqueField : Field
+    public class UniqueField : IField
     {
-        UniqueField()
+        public UniqueField()
         {
 
         }
@@ -51,25 +51,25 @@ namespace Potential
         }
     }
 
-    public class CombinedField : Field
+    public class CombinedField : IField
     {
-        private Func<float, Field, Particle, float> CombinatorParticle { get; set; }
-        private Func<float, Field, Vector3, float> CombinatorPosition { get; set; }
-        private readonly Field[] F;
+        private Func<float, IField, Particle, float> CombinatorParticle { get; set; }
+        private Func<float, IField, Vector3, float> CombinatorPosition { get; set; }
+        private readonly IField[] F;
         private readonly CombineBy C;
-        CombinedField(Field f, Field g, CombineBy c)
+        CombinedField(IField f, IField g, CombineBy c)
         {
             CombinatorParticle = CombineFunction<Particle>(c);
             CombinatorPosition = CombineFunction(c);
-            F = new Field[2];
+            F = new IField[2];
             F[0] = f;
             F[1] = g;
             C = c;
         }
 
-        private static Func<float, Field, T, float> CombineFunction<T>(CombineBy c) where T : Particle
+        private static Func<float, IField, T, float> CombineFunction<T>(CombineBy c) where T : Particle
         {
-            Func<float, Field, T, float> f = (x, y, p) => 0.0f;
+            Func<float, IField, T, float> f;
             switch (c)
             {
                 case CombineBy.ADDITION:
@@ -87,12 +87,15 @@ namespace Potential
                 case CombineBy.EXPONENTIATION:
                     f = (x, y, p) => (float)Math.Pow(x, y.Value(p));
                     break;
+                default:
+                    f = (x, y, p) => 0.0f;
+                    break;
             }
             return f;
         }
-        private static Func<float, Field, Vector3, float> CombineFunction(CombineBy c)
+        private static Func<float, IField, Vector3, float> CombineFunction(CombineBy c)
         {
-            Func<float, Field, Vector3, float> f = (x, y, p) => 0.0f;
+            Func<float, IField, Vector3, float> f;
             switch (c)
             {
                 case CombineBy.ADDITION:
@@ -108,12 +111,15 @@ namespace Potential
                     f = (x, y, p) => x / y.Value(p);
                     break;
                 case CombineBy.EXPONENTIATION:
-                    f = (x, y, p) => (float)System.Math.Pow(x, y.Value(p));
+                    f = (x, y, p) => (float)Math.Pow(x, y.Value(p));
+                    break;
+                default:
+                    f = (x, y, p) => 0.0f;
                     break;
             }
             return f;
         }
-        CombinedField(Field[] f, CombineBy c)
+        CombinedField(IField[] f, CombineBy c)
         {
             CombinatorParticle = CombineFunction<Particle>(c);
             CombinatorPosition = CombineFunction(c);

@@ -5,26 +5,26 @@ using System.Linq;
 using System;
 namespace Potential
 {
-    public class Tracer : GameObject
+    public class Tracer : IGameObject
     {
         private readonly Texture2D ParticleTexture;
         private readonly Vector2 Origin;
-        private Color ParticleColor { get; set; } = Color.White;
+        private Color ParticleColor { get; } = Color.White;
         private readonly float Spacing;
         private readonly int Length;
         private readonly float TracerHeight;
         private readonly float TracerWidth;
         private readonly Vector2 Scale;
-        private LinkedList<Vector3> PreviousLocations { get; set; } = null;
-        private LinkedList<Vector3> PreviousOrientations { get; set; } = null;
+        private LinkedList<Vector3> PreviousLocations { get;  }
+        private LinkedList<Vector3> PreviousOrientations { get; }
 
-        public Tracer(Texture2D texture, Particle p, int length = 10, float spacing = 20, float tracerwidth = 20, float tracerheight = 5, Color? color = null)
+        public Tracer(Texture2D texture, Particle p, int length = 10, float spacing = 20, float tracerWidth = 20, float tracerHeight = 5, Color? color = null)
         {
             ParticleTexture = texture;
             Length = length;
             Spacing = spacing;
-            TracerWidth = tracerwidth;
-            TracerHeight = tracerheight;
+            TracerWidth = tracerWidth;
+            TracerHeight = tracerHeight;
             var start = p.Position;
             var orientation = p.Velocity;
             if (Math.Abs(orientation.Length()) > float.Epsilon)
@@ -92,8 +92,8 @@ namespace Potential
                 var theta = 0.0f;
                 if (orientation != Vector3.Zero)
                 {
-                    var cos_theta = Vector3.Dot(orientation, Vector3.UnitX) / orientation.Length();
-                    theta = (float)Math.Acos(cos_theta);
+                    var cosTheta = Vector3.Dot(orientation, Vector3.UnitX) / orientation.Length();
+                    theta = (float)Math.Acos(cosTheta);
                 }
                 batch.Draw(ParticleTexture, new Vector2(position.X, position.Y),
                     origin: Origin, scale: new Vector2(Scale.X, Scale.Y), rotation: theta, color: ParticleColor);

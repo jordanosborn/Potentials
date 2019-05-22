@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/.Rider2019.1/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.1/system/resharper-host/local/Transient/ReSharperHost/v191/SolutionCaches/_Potential.-1610965015.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.1/system/rust_expanded_macros/cDrmbTex/expansions" t="IncludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p=".git/info/exclude" t="IncludeRecursive" />
+      <e p=".gitattributes" t="Include" />
+      <e p=".gitignore" t="Include" />
+      <e p="Content" t="Include">
+        <e p="Content.mgcb" t="Include" />
+        <e p="Font.spritefont" t="Include" />
+        <e p="arial.ttf" t="Include" />
+        <e p="background.jpg" t="Include" />
+        <e p="bin" t="Include">
+          <e p="DesktopGL" t="Include">
+            <e p="Content" t="Include">
+              <e p="Font.xnb" t="Include" />
+              <e p="background.xnb" t="Include" />
+              <e p="blackhole.xnb" t="Include" />
+              <e p="circle.xnb" t="Include" />
+              <e p="cursor.xnb" t="Include" />
+              <e p="moon.xnb" t="Include" />
+            </e>
+            <e p="Font.xnb" t="Include" />
+            <e p="blackhole.xnb" t="Include" />
+            <e p="moon.xnb" t="Include" />
+          </e>
+        </e>
+        <e p="blackhole.png" t="Include" />
+        <e p="circle.png" t="Include" />
+        <e p="cursor.png" t="Include" />
+        <e p="moon.png" t="Include" />
+        <e p="obj" t="Include">
+          <e p="DesktopGL" t="Include">
+            <e p=".mgcontent" t="Include" />
+            <e p=".mgstats" t="Include" />
+            <e p="Content" t="Include">
+              <e p=".mgcontent" t="Include" />
+              <e p="Font.mgcontent" t="Include" />
+              <e p="background.mgcontent" t="Include" />
+              <e p="blackhole.mgcontent" t="Include" />
+              <e p="circle.mgcontent" t="Include" />
+              <e p="cursor.mgcontent" t="Include" />
+              <e p="moon.mgcontent" t="Include" />
+            </e>
+            <e p="Font.mgcontent" t="Include" />
+            <e p="blackhole.mgcontent" t="Include" />
+            <e p="moon.mgcontent" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="Field.cs" t="Include" />
+      <e p="ForceFactory.cs" t="Include" />
+      <e p="GameState.cs" t="Include" />
+      <e p="IGameObject.cs" t="Include" />
+      <e p="Particle.cs" t="Include" />
+      <e p="Potential.csproj" t="IncludeRecursive" />
+      <e p="Potential.sln" t="IncludeFlat" />
+      <e p="PotentialGame.cs" t="Include" />
+      <e p="Program.cs" t="Include" />
+      <e p="README.md" t="Include" />
+      <e p="Tracer.cs" t="Include" />
+      <e p="TransientParticle.cs" t="Include" />
+      <e p="Utilities.cs" t="Include" />
+      <e p="World.cs" t="Include" />
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive">
+        <e p="Debug" t="Include">
+          <e p="netcoreapp2.2" t="Include">
+            <e p="Potential.AssemblyInfo.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>

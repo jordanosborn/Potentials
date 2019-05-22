@@ -1,22 +1,25 @@
 using System;
 using Microsoft.Xna.Framework;
-namespace Potential.Force
+namespace Potential
 {
-    using Function = Func<Particle, Particle, Vector3>;
-    public static class Factory
+    namespace Force
     {
-        public static Function SpringForce(float k, float l0)
+        using Function = Func<Particle, Particle, Vector3>;
+        public static class Factory
         {
-            return (p1, p2) =>
+            public static Function SpringForce(float k, float l0)
             {
-                var x = p1.Position - p2.Position;
-                var xl = x.Length();
-                if (Math.Abs(xl) > float.Epsilon)
+                return (p1, p2) =>
                 {
-                    x.Normalize();
-                }
-                return -k * (xl - l0) * x;
-            };
+                    var x = p1.Position - p2.Position;
+                    var xl = x.Length();
+                    if (Math.Abs(xl) > float.Epsilon)
+                    {
+                        x.Normalize();
+                    }
+                    return -k * (xl - l0) * x;
+                };
+            }
         }
     }
 }

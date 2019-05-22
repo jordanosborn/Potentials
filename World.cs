@@ -6,18 +6,18 @@ using Microsoft.Xna.Framework.Input;
 namespace Potential
 {
     //TODO: segment world to reduce computational complexity, scale pixels to real world values;
-    public class World : GameObject, ICloneable
+    public class World : IGameObject
     {
-        public List<Field> IntrinsicFields { get; set; }
+        public List<IField> IntrinsicFields { get; set; }
         public List<Particle> Particles { get; set; }
-        public Dictionary<string, Texture2D> Textures { get; set; } = null;
+        public Dictionary<string, Texture2D> Textures { get; set; }
         public World(Dictionary<string, Texture2D> textures)
         {
             Textures = textures;
-            IntrinsicFields = new List<Field>();
+            IntrinsicFields = new List<IField>();
             Particles = new List<Particle>();
         }
-        public void AddField(Field f)
+        public void AddField(IField f)
         {
             IntrinsicFields.Add(f);
         }
@@ -36,7 +36,7 @@ namespace Potential
             }
             return null;
         }
-        public Field RemoveField(uint id)
+        public IField RemoveField(uint id)
         {
             if (id < IntrinsicFields.Count)
             {
@@ -76,7 +76,7 @@ namespace Potential
         {
             var world = new World(Textures);
             world.Particles = (List<Particle>)Particles.Clone();
-            world.IntrinsicFields = (List<Field>)IntrinsicFields.Clone();
+            world.IntrinsicFields = (List<IField>)IntrinsicFields.Clone();
             return world;
         }
     }

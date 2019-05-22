@@ -22,43 +22,41 @@ namespace Potential.Utilities
 
     class SmartFramerate
     {
-        double currentFrametimes;
-        readonly double weight;
-        readonly int numerator;
+        double CurrentFrametimes;
+        readonly double Weight;
+        readonly int Numerator;
         public Vector2 Position { get; set; }
 
         public double Framerate
         {
-            get
-            {
-                return (Math.Abs(currentFrametimes) > float.Epsilon) ? (numerator / currentFrametimes) : 0;
-            }
+            get => Math.Abs(CurrentFrametimes) > float.Epsilon ? Numerator / CurrentFrametimes : 0;
+
         }
 
         public SmartFramerate(int oldFrameWeight, (int, int) position)
         {
-            numerator = oldFrameWeight;
-            weight = oldFrameWeight / (oldFrameWeight - 1d);
+            Numerator = oldFrameWeight;
+            Weight = oldFrameWeight / (oldFrameWeight - 1d);
             Position = new Vector2(position.Item1, position.Item2);
         }
 
         public void Update(GameTime time)
         {
             var timeSinceLastFrame = time.ElapsedGameTime.TotalSeconds;
-            currentFrametimes = currentFrametimes / weight;
-            currentFrametimes += timeSinceLastFrame;
+            CurrentFrametimes = CurrentFrametimes / Weight;
+            CurrentFrametimes += timeSinceLastFrame;
         }
     }
     public static class MathUtils
     {
-        public static Vector3 Derivative(Field f, Vector3 position, Vector3 orientation, float h = 0.001f)
+        public static Vector3 Derivative(IField f, Vector3 position, Vector3 orientation, float h = 0.001f)
         {
             orientation.Normalize();
             var dq = orientation * h;
             var df = (-f.Value(position + 2 * dq) + 8 * f.Value(position + dq) - 8 * f.Value(position - dq) + f.Value(position - 2 * dq)) / (12 * h);
             return df * orientation;
         }
-        public static Vector3 Derivative3(Field f, Vector3 position, float h = 0.001f)
+        public static Vector3 Derivative3(IField f, Vector3 position, float h = 0.001f)
         {
             var dx = new Vector3(h, 0, 0);
             var dy = new Vector3(0, h, 0);
@@ -70,9 +68,9 @@ namespace Potential.Utilities
         }
     }
 }
-static class Extensions
+internal static class Extensions
 {
-    public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
+    public static IList<T> Clone<T>(this IEnumerable<T> listToClone) where T : ICloneable
     {
         return listToClone.Select(item => (T)item.Clone()).ToList();
     }
