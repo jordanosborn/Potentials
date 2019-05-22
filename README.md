@@ -5,7 +5,6 @@ Potentials Tower Defense Game!
 ### Controls
     ESC - Quit
     SPACE - Pause
-    T - Tracers On/Off
     ENTER - Create Particle If Valid
     BACKSPACE - Reset Parameter Value
     SHIFT - BACKSPACE - Reset All Parameter Values
@@ -15,6 +14,7 @@ Potentials Tower Defense Game!
     Q - Edit Charge Parameter
     J - Edit Spin Parameter
     I - Edit Particle Type
+    T - Toggle Particle Tracer
     P - Edit Position
         X - Edit X Position
         Y - Edit Y Position
