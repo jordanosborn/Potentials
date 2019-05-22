@@ -23,6 +23,7 @@ Potentials Tower Defense Game!
         X - Edit X Velocity
         Y - Edit Y Velocity
         Z - Edit Z Velocity
+    0-9 . - Edit Parameter Value
     
     
     
