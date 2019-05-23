@@ -73,6 +73,7 @@ namespace Potential
             Textures["cursor"] = Content.Load<Texture2D>("cursor");
             Textures["tracer"] = Content.Load<Texture2D>("circle");
             Textures["arrow"] = Content.Load<Texture2D>("arrow");
+            Textures["arrow_tail"] = Content.Load<Texture2D>("arrow_tail");
             Textures["background"] = Content.Load<Texture2D>("background");
             Font = Content.Load<SpriteFont>("Font");
             State = GameState.GetState(Font);

@@ -117,18 +117,24 @@ namespace Potential
             if (LastClicked == MouseButtonCode.LEFT)
             {
                 var texture = world.Textures["arrow"];
-                var origin = new Vector2(0, texture.Height / 2);
+                var textureTail = world.Textures["arrow_tail"];
+                var originTail = new Vector2(0, textureTail.Height / 2);
+                var origin = new Vector2(texture.Width / 2, texture.Height / 2);
                 var position = new Vector2(ParamValues.Position.X, ParamValues.Position.Y);
                 var (mouseX, mouseY) = Mouse.GetState().Position;
-                var arrowLength = (new Vector2(mouseX, mouseY) - position).Length() / texture.Width;
+                var arrowLength = (new Vector2(mouseX, mouseY) - position).Length() / textureTail.Width;
                 ParamValues.Velocity = new Vector3(mouseX, mouseY, 0) - ParamValues.Position;
                 var velMagnitude = ParamValues.Velocity.Length();
                 var (x, y, _) = ParamValues.Velocity / (Math.Abs(velMagnitude) < float.Epsilon ? 1 : velMagnitude);
                 //ANGLE incorrect
                 var theta = (float) Math.Acos(Vector2.Dot(new Vector2(x, y), Vector2.UnitX));
-                //TODO: arrow looks funky draw arrow head and box!
-                batch.Draw(texture, position, origin: origin, color: ColorFg,
-                    rotation: y < 0 ? -theta : theta, scale: new Vector2(arrowLength, 10.0f / texture.Height));
+
+                const float scale = 20.0f;
+                batch.Draw(textureTail, position, origin: originTail, color: ColorFg,
+                    rotation: y < 0 ? -theta : theta, scale: new Vector2(arrowLength, scale / textureTail.Height));
+                if (Math.Abs(velMagnitude) > float.Epsilon)
+                    batch.Draw(texture, new Vector2(mouseX, mouseY), origin: origin, color: ColorFg,
+                        rotation: y < 0 ? -theta : theta, scale: new Vector2(scale / texture.Width, scale / texture.Height));
             }
 
             return ErrorCodes.SUCCESS;

@@ -8,11 +8,13 @@
       <e p="Content" t="Include">
         <e p="arial.ttf" t="Include" />
         <e p="arrow.png" t="Include" />
+        <e p="arrow_tail.png" t="Include" />
         <e p="background.jpg" t="Include" />
         <e p="bin" t="Include">
           <e p="DesktopGL" t="Include">
             <e p="Content" t="Include">
               <e p="arrow.xnb" t="Include" />
+              <e p="arrow_tail.xnb" t="Include" />
               <e p="background.xnb" t="Include" />
               <e p="blackhole.xnb" t="Include" />
               <e p="circle.xnb" t="Include" />
@@ -33,6 +35,7 @@
             <e p="Content" t="Include">
               <e p=".mgcontent" t="Include" />
               <e p="arrow.mgcontent" t="Include" />
+              <e p="arrow_tail.mgcontent" t="Include" />
               <e p="background.mgcontent" t="Include" />
               <e p="blackhole.mgcontent" t="Include" />
               <e p="circle.mgcontent" t="Include" />
@@ -48,7 +51,7 @@
       <e p="GameState.cs" t="Include" />
       <e p="IGameObject.cs" t="Include" />
       <e p="obj" t="ExcludeRecursive">
-        <e p="Release" t="Include">
+        <e p="Debug" t="Include">
           <e p="netcoreapp2.2" t="Include">
             <e p="Potential.AssemblyInfo.cs" t="Include" />
           </e>
