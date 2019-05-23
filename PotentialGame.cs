@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -51,12 +50,12 @@ namespace Potential
             Cursor = MouseCursor.FromTexture2D(Textures["cursor"],
                 Textures["cursor"].Width / 2, Textures["cursor"].Height / 2);
             Mouse.SetCursor(Cursor);
-            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(400, 400, 0),
-                new Vector3(0, -50, 0), 50, 0, angular_velocity: -0.8f));
+            GameWorld.AddParticle(new Particle(Textures["blackhole"], new Vector3(300, 400, 0),
+                new Vector3(30, 0, 0), 50, 0, angular_velocity: -0.8f));
             GameWorld.Particles[0].ParticleTracer =
                 new Tracer(Textures["tracer"], GameWorld.Particles[0], color: Color.Red);
             GameWorld.AddParticle(new Particle(Textures["moon"], new Vector3(400, 400, 0),
-                new Vector3(0, 50, 0), 50));
+                new Vector3(-30, 50, 0), 50));
             GameWorld.Particles[1].ParticleTracer =
                 new Tracer(Textures["tracer"], GameWorld.Particles[1], color: Color.Blue);
             GameWorld.Particles[1].AddInterParticleForceSymmetric(
@@ -86,9 +85,6 @@ namespace Potential
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            if (MouseButtonStates.Any(b => b == ButtonState.Pressed))
-                Mouse.SetCursor(MouseCursor.Crosshair);
-            else if (MouseButtonStates.Any(b => b == ButtonState.Released)) Mouse.SetCursor(Cursor);
             if (!State.IsPaused)
             {
                 //TODO: should this be cloned here?

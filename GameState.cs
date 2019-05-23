@@ -114,22 +114,41 @@ namespace Potential
             var s = string.Join("    ", TextUI);
             batch.DrawString(Font, s, Fps.Position, ColorFg);
             DrawParamUi(batch, new Vector2(4, window.ClientBounds.Height - 20));
+            if (LastClicked == MouseButtonCode.LEFT)
+            {
+                var texture = world.Textures["arrow"];
+                var origin = new Vector2(0, texture.Height / 2);
+                var position = new Vector2(ParamValues.Position.X, ParamValues.Position.Y);
+                var (mouseX, mouseY) = Mouse.GetState().Position;
+                var arrowLength = (new Vector2(mouseX, mouseY) - position).Length() / texture.Width;
+                ParamValues.Velocity = new Vector3(mouseX, mouseY, 0) - ParamValues.Position;
+                var velMagnitude = ParamValues.Velocity.Length();
+                var (x, y, _) = ParamValues.Velocity / (Math.Abs(velMagnitude) < float.Epsilon ? 1 : velMagnitude);
+                //ANGLE incorrect
+                var theta = (float) Math.Acos(Vector2.Dot(new Vector2(x, y), Vector2.UnitX));
+                //TODO: arrow looks funky draw arrow head and box!
+                batch.Draw(texture, position, origin: origin, color: ColorFg,
+                    rotation: y < 0 ? -theta : theta, scale: new Vector2(arrowLength, 20.0f / texture.Height));
+            }
+
             return ErrorCodes.SUCCESS;
         }
 
-        private ErrorCodes MouseClick(MouseState pressed, MouseButtonCode button, Func<ErrorCodes> func)
+        private ErrorCodes MouseClick(MouseState pressed, MouseButtonCode button, Func<ErrorCodes> before,
+            Func<ErrorCodes> after)
         {
             var clicked = button == MouseButtonCode.LEFT ? pressed.LeftButton :
                 button == MouseButtonCode.RIGHT ? pressed.RightButton : pressed.MiddleButton;
 
             if (clicked == ButtonState.Released && LastClicked.HasValue && LastClicked.Value == button)
             {
-                func();
                 LastClicked = null;
+                after();
             }
-            else if (clicked == ButtonState.Pressed)
+            else if (clicked == ButtonState.Pressed && LastClicked != button)
             {
                 LastClicked = button;
+                before();
             }
 
             return ErrorCodes.SUCCESS;
@@ -203,25 +222,18 @@ namespace Potential
                 LastPressed = Keys.D;
             }
 
-            if (keyboardState.IsKeyUp(Keys.Enter) && LastPressed.HasValue && LastPressed.Value == Keys.Enter)
+            if (mouseState.LeftButton == ButtonState.Released && LastClicked.HasValue &&
+                LastClicked.Value == MouseButtonCode.LEFT)
             {
-                //TODO: allow choice of particle type
-
                 ParamValues.Texture = world.Textures["moon"];
                 world.AddParticle(Particle.FromParams(ParamValues));
-                LastPressed = null;
+                LastClicked = null;
             }
-            else if (keyboardState.IsKeyDown(Keys.Enter))
+            else if (mouseState.LeftButton == ButtonState.Pressed && LastClicked != MouseButtonCode.LEFT)
             {
-                LastPressed = Keys.Enter;
-            }
-
-            MouseClick(mouseState, MouseButtonCode.LEFT, () =>
-            {
+                LastClicked = MouseButtonCode.LEFT;
                 ParamValues.Position = new Vector3(mouseState.X, mouseState.Y, 0);
-                return ErrorCodes.SUCCESS;
-            });
-
+            }
 
             Fps.Update(time);
             return ErrorCodes.SUCCESS;

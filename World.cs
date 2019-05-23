@@ -7,6 +7,7 @@ namespace Potential
 {
     //TODO: segment world to reduce computational complexity, scale pixels to real world values;
     //TODO: remove particles that have gone too far
+    //TODO: use world coords then translate to pixel coords!
     public class World : IGameObject
     {
         public World(Dictionary<string, Texture2D> textures)
