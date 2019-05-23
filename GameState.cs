@@ -1,16 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
-using System.Linq;
+using Potential.Utilities;
 
-using System;
 namespace Potential
 {
-    using Utilities;
     public class GameState
     {
-
         public enum UiFlags
         {
             TRACERS_ON,
@@ -18,40 +17,14 @@ namespace Potential
             FPS_ON,
             MOUSE_LOCATION_ON
         }
+
         private static readonly int ParameterCount = Enum.GetValues(typeof(ParticleParams.Param)).Length;
-        private enum MouseButtonCode
-        {
-            LEFT,
-            RIGHT,
-            MIDDLE
-        }
+        private static GameState _state;
         private readonly Color ColorFg = Color.White;
-        private Color ColorBg = Color.Black;
-        private SpriteFont Font { get; set; }
         private readonly SmartFramerate Fps = new SmartFramerate(5, (4, 0));
         private readonly Vector2 SelectedPosition = new Vector2(4, 20);
-        private Keys? LastPressed { get; set; }
-        private MouseButtonCode? LastClicked { get; set; }
-        private ParticleParams.Param ParamSelected { get; set; } = ParticleParams.Param.MASS;
-        private ParticleParams ParamValues { get; set; } = new ParticleParams();
-        public HashSet<UiFlags> Flags { get; private set; } = new HashSet<UiFlags>();
-        public bool IsPaused { get => Flags.Contains(UiFlags.PAUSED); }
-        private static GameState _state;
+        private Color ColorBg = Color.Black;
 
-        public static GameState GetState(SpriteFont font = null)
-        {
-            if (_state == null)
-            {
-                if (font == null)
-                {
-                    throw new ArgumentNullException();
-                }
-                _state = new GameState(font);
-            }
-
-            return _state;
-
-        }
         private GameState(SpriteFont font)
         {
             Font = font;
@@ -59,6 +32,25 @@ namespace Potential
             Flags.Add(UiFlags.FPS_ON);
             Flags.Add(UiFlags.MOUSE_LOCATION_ON);
             Flags.Add(UiFlags.TRACERS_ON);
+        }
+
+        private SpriteFont Font { get; }
+        private Keys? LastPressed { get; set; }
+        private MouseButtonCode? LastClicked { get; set; }
+        private ParticleParams.Param ParamSelected { get; set; } = ParticleParams.Param.MASS;
+        private ParticleParams ParamValues { get; } = new ParticleParams();
+        public HashSet<UiFlags> Flags { get; } = new HashSet<UiFlags>();
+        public bool IsPaused => Flags.Contains(UiFlags.PAUSED);
+
+        public static GameState GetState(SpriteFont font = null)
+        {
+            if (_state == null)
+            {
+                if (font == null) throw new ArgumentNullException();
+                _state = new GameState(font);
+            }
+
+            return _state;
         }
 
         private void DrawParamUi(SpriteBatch batch, Vector2 location)
@@ -91,8 +83,9 @@ namespace Potential
                     filterText = "";
                     break;
             }
-            var selectedText = string.Join("    ", textUi.Where((s) => s.Contains(filterText)).ToList());
-            var unselectedText = string.Join("    ", textUi.Where((s) => !s.Contains(filterText)).ToList());
+
+            var selectedText = string.Join("    ", textUi.Where(s => s.Contains(filterText)).ToList());
+            var unselectedText = string.Join("    ", textUi.Where(s => !s.Contains(filterText)).ToList());
             batch.DrawString(Font, unselectedText, location, ColorFg);
             batch.DrawString(Font, selectedText, SelectedPosition, Color.Green);
         }
@@ -101,38 +94,33 @@ namespace Potential
         {
             var TextUI = new List<string>();
             TextUI.Add($"Particles: {world.Particles.Count()}");
-            if (Flags.Contains(UiFlags.FPS_ON))
-            {
-                TextUI.Add($"{Math.Round(Fps.Framerate, 0)}FPS");
-            }
+            if (Flags.Contains(UiFlags.FPS_ON)) TextUI.Add($"{Math.Round(Fps.Framerate, 0)}FPS");
             if (Flags.Contains(UiFlags.MOUSE_LOCATION_ON))
             {
                 var mouse_state = Mouse.GetState();
                 int X = mouse_state.X, Y = mouse_state.Y;
-                if ((mouse_state.X < 0 || mouse_state.X > window.ClientBounds.Width) ||
-                    (mouse_state.Y < 0 || mouse_state.Y > window.ClientBounds.Height))
+                if (mouse_state.X < 0 || mouse_state.X > window.ClientBounds.Width || mouse_state.Y < 0 ||
+                    mouse_state.Y > window.ClientBounds.Height)
                 {
                     X = 0;
                     Y = 0;
                 }
+
                 TextUI.Add($"({X}, {Y})");
             }
-            if (Flags.Contains(UiFlags.PAUSED))
-            {
-                TextUI.Add("PAUSED");
-            }
-            if (!Flags.Contains(UiFlags.TRACERS_ON))
-            {
-                TextUI.Add("Tracers: OFF");
-            }
+
+            if (Flags.Contains(UiFlags.PAUSED)) TextUI.Add("PAUSED");
+            if (!Flags.Contains(UiFlags.TRACERS_ON)) TextUI.Add("Tracers: OFF");
             var s = string.Join("    ", TextUI);
             batch.DrawString(Font, s, Fps.Position, ColorFg);
             DrawParamUi(batch, new Vector2(4, window.ClientBounds.Height - 20));
             return ErrorCodes.SUCCESS;
         }
+
         private ErrorCodes MouseClick(MouseState pressed, MouseButtonCode button, Func<ErrorCodes> func)
         {
-            var clicked = (button == MouseButtonCode.LEFT) ? pressed.LeftButton : (button == MouseButtonCode.RIGHT) ? pressed.RightButton : pressed.MiddleButton;
+            var clicked = button == MouseButtonCode.LEFT ? pressed.LeftButton :
+                button == MouseButtonCode.RIGHT ? pressed.RightButton : pressed.MiddleButton;
 
             if (clicked == ButtonState.Released && LastClicked.HasValue && LastClicked.Value == button)
             {
@@ -143,6 +131,7 @@ namespace Potential
             {
                 LastClicked = button;
             }
+
             return ErrorCodes.SUCCESS;
         }
 
@@ -158,35 +147,44 @@ namespace Potential
                 LastPressed = key;
             }
         }
-        public ErrorCodes Update(KeyboardState keyboardState, MouseState mouseState, ref World world, GameTime time = null, GameState state = null)
+
+        public ErrorCodes Update(KeyboardState keyboardState, MouseState mouseState, ref World world,
+            GameTime time = null, GameState state = null)
         {
             KeyPress(keyboardState, Keys.Space, () =>
             {
                 if (Flags.Contains(UiFlags.PAUSED))
-                {
                     Flags.Remove(UiFlags.PAUSED);
-                }
                 else
-                {
                     Flags.Add(UiFlags.PAUSED);
-                }
                 return ErrorCodes.SUCCESS;
             });
             KeyPress(keyboardState, Keys.T, () =>
             {
                 if (Flags.Contains(UiFlags.TRACERS_ON))
-                {
                     Flags.Remove(UiFlags.TRACERS_ON);
-                }
                 else
-                {
                     Flags.Add(UiFlags.TRACERS_ON);
-                }
                 return ErrorCodes.SUCCESS;
             });
             KeyPress(keyboardState, Keys.Tab, () =>
             {
-                ParamSelected = (ParticleParams.Param)(((int)ParamSelected + 1) % (ParameterCount));
+                ParamSelected = (ParticleParams.Param) (((int) ParamSelected + 1) % ParameterCount);
+                return ErrorCodes.SUCCESS;
+            });
+            KeyPress(keyboardState, Keys.M, () =>
+            {
+                ParamSelected = ParticleParams.Param.MASS;
+                return ErrorCodes.SUCCESS;
+            });
+            KeyPress(keyboardState, Keys.R, () =>
+            {
+                ParamSelected = ParticleParams.Param.RADIUS;
+                return ErrorCodes.SUCCESS;
+            });
+            KeyPress(keyboardState, Keys.Q, () =>
+            {
+                ParamSelected = ParticleParams.Param.CHARGE;
                 return ErrorCodes.SUCCESS;
             });
             KeyPress(keyboardState, Keys.Back, () =>
@@ -194,8 +192,21 @@ namespace Potential
                 ParamValues.ResetParam(ParamSelected);
                 return ErrorCodes.SUCCESS;
             });
+            //TODO: delete selected particle
+            if (keyboardState.IsKeyUp(Keys.D) && LastPressed.HasValue && LastPressed.Value == Keys.D)
+            {
+                world.RemoveParticle(1);
+                LastPressed = null;
+            }
+            else if (keyboardState.IsKeyDown(Keys.D))
+            {
+                LastPressed = Keys.D;
+            }
+
             if (keyboardState.IsKeyUp(Keys.Enter) && LastPressed.HasValue && LastPressed.Value == Keys.Enter)
             {
+                //TODO: allow choice of particle type
+
                 ParamValues.Texture = world.Textures["moon"];
                 world.AddParticle(Particle.FromParams(ParamValues));
                 LastPressed = null;
@@ -204,6 +215,7 @@ namespace Potential
             {
                 LastPressed = Keys.Enter;
             }
+
             MouseClick(mouseState, MouseButtonCode.LEFT, () =>
             {
                 ParamValues.Position = new Vector3(mouseState.X, mouseState.Y, 0);
@@ -214,10 +226,17 @@ namespace Potential
             Fps.Update(time);
             return ErrorCodes.SUCCESS;
         }
+
         public object Clone()
         {
             return _state;
         }
 
+        private enum MouseButtonCode
+        {
+            LEFT,
+            RIGHT,
+            MIDDLE
+        }
     }
 }
