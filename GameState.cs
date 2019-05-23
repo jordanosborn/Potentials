@@ -128,7 +128,7 @@ namespace Potential
                 var theta = (float) Math.Acos(Vector2.Dot(new Vector2(x, y), Vector2.UnitX));
                 //TODO: arrow looks funky draw arrow head and box!
                 batch.Draw(texture, position, origin: origin, color: ColorFg,
-                    rotation: y < 0 ? -theta : theta, scale: new Vector2(arrowLength, 20.0f / texture.Height));
+                    rotation: y < 0 ? -theta : theta, scale: new Vector2(arrowLength, 10.0f / texture.Height));
             }
 
             return ErrorCodes.SUCCESS;
@@ -167,7 +167,7 @@ namespace Potential
             }
         }
 
-        public ErrorCodes Update(KeyboardState keyboardState, MouseState mouseState, ref World world,
+        public ErrorCodes Update(KeyboardState keyboardState, MouseState mouseState, World world,
             GameTime time = null, GameState state = null)
         {
             KeyPress(keyboardState, Keys.Space, () =>
@@ -181,9 +181,15 @@ namespace Potential
             KeyPress(keyboardState, Keys.T, () =>
             {
                 if (Flags.Contains(UiFlags.TRACERS_ON))
+                {
                     Flags.Remove(UiFlags.TRACERS_ON);
+                    foreach (var p in world.Particles) p.ParticleTracer?.Reset();
+                }
                 else
+                {
                     Flags.Add(UiFlags.TRACERS_ON);
+                }
+
                 return ErrorCodes.SUCCESS;
             });
             KeyPress(keyboardState, Keys.Tab, () =>

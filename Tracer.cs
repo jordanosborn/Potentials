@@ -56,8 +56,8 @@ namespace Potential
         }
 
         private Color ParticleColor { get; } = Color.White;
-        private LinkedList<Vector3> PreviousLocations { get; }
-        private LinkedList<Vector3> PreviousOrientations { get; }
+        private LinkedList<Vector3> PreviousLocations { get; set; }
+        private LinkedList<Vector3> PreviousOrientations { get; set; }
 
         public ErrorCodes Update(GameTime time, World world, GameState state, object particle)
         {
@@ -65,6 +65,14 @@ namespace Potential
             var start = p.Position;
             var vel = p.Velocity;
             if (Math.Abs(vel.Length()) > float.Epsilon) vel.Normalize();
+            if (PreviousLocations.Last == null)
+            {
+                PreviousLocations.AddLast(start);
+                var orientation = p.Velocity;
+                if (Math.Abs(orientation.Length()) > float.Epsilon) orientation.Normalize();
+                PreviousOrientations.AddLast(orientation);
+            }
+
             var difference = start - PreviousLocations.Last.Value;
             if (difference.Length() > Spacing)
             {
@@ -106,6 +114,12 @@ namespace Potential
         {
             return new Tracer(ParticleTexture, PreviousLocations, PreviousOrientations, Length, Spacing, TracerWidth,
                 TracerHeight, ParticleColor);
+        }
+
+        public void Reset()
+        {
+            PreviousLocations = new LinkedList<Vector3>();
+            PreviousOrientations = new LinkedList<Vector3>();
         }
     }
 }

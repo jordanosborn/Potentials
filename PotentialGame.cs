@@ -95,7 +95,7 @@ namespace Potential
                 base.Update(gameTime);
             }
 
-            State.Update(Keyboard.GetState(), Mouse.GetState(), ref GameWorld, gameTime);
+            State.Update(Keyboard.GetState(), Mouse.GetState(), GameWorld, gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
