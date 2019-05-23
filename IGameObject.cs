@@ -11,7 +11,7 @@ namespace Potential
         ErrorCodes Draw(SpriteBatch batch);
         //Returns shape of objet true if vector inside shape.
         bool Shape(Vector3 pos);
-        //TODO: if two shapes collide, null if no collision
+        //TODO: if two shapes collide, null if no collision, returns strength np.inf (totally elastic, instant vel change)
         float? CollisionCheck(IGameComponent collider);
     }
 }
