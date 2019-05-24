@@ -1,5 +1,4 @@
-# Potentials TD
-Potentials Tower Defense Game!
+# Potentials
 ### To Run
     dotnet run
 ### Controls
