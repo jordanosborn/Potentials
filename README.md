@@ -1,4 +1,5 @@
 # Potentials
+Particle simulator
 ### To Run
     dotnet run
 ### Controls
