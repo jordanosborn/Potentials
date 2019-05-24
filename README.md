@@ -15,7 +15,7 @@ Potentials Tower Defense Game!
     J - Edit Spin Parameter
     I - Edit Particle Type
     T - Toggle Particle Tracer
-    CLICK, DRAG AND RELEASE - To create a particle at position of initial click and with velocity eqaul to the mouse drag direction.
+    CLICK, DRAG AND RELEASE - Create a particle at position of initial click and with velocity in the mouse drag direction.
     - 0-9 . - Edit Parameter Value
 ### TODO:
 1. Improve integration method
