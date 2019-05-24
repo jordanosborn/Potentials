@@ -32,7 +32,7 @@ Potentials Tower Defense Game!
 1. Improve cursor click animation
 1. More textures
 1. More forces in factory
-1. Ability to modify velocity with mouse drag or numbers (draw arrow).
+1. Ability to modify velocity numbers
 1. Modify and set more parameters. Limits on param setting r>0 etc.
 1. Only allow modification when sim is paused
 1. Reverse time.
@@ -45,7 +45,7 @@ Potentials Tower Defense Game!
 1. Mobile Versions
 1. Implement gameplay
 1. UI improvements (Pause Menu)
-1. Constrain field.
+1. Constrain space 
 1. Add fields.
 1. 3D
 1. Edit backgrounds
