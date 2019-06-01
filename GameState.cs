@@ -126,7 +126,7 @@ namespace Potential
                 ParamValues.Velocity = new Vector3(mouseX, mouseY, 0) - ParamValues.Position;
                 var velMagnitude = ParamValues.Velocity.Length();
                 var (x, y, _) = ParamValues.Velocity / (Math.Abs(velMagnitude) < float.Epsilon ? 1 : velMagnitude);
-                //ANGLE incorrect
+
                 var theta = (float) Math.Acos(Vector2.Dot(new Vector2(x, y), Vector2.UnitX));
 
                 const float scale = 20.0f;
@@ -223,7 +223,7 @@ namespace Potential
                 ParamValues.ResetParam(ParamSelected);
                 return ErrorCodes.SUCCESS;
             });
-            //TODO: delete selected particle
+            //TODO: select a particle edit stats delete copy params
             if (keyboardState.IsKeyUp(Keys.D) && LastPressed.HasValue && LastPressed.Value == Keys.D)
             {
                 world.RemoveParticle(1);
