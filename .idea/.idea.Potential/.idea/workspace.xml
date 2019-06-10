@@ -1,34 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d0d16ef0-7f72-401f-9aef-02ee07ca0eb9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Potential/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Potential/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Potential/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Potential/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Potential/riderModule.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Potential/riderModule.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Content.mgcb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Font.spritefont" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/arial.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/arrow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/arrow_tail.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/background.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/blackhole.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/circle.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/cursor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/moon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Field.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ForceFactory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GameState.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/IGameObject.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particle.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Potential.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Potential.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Potential.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PotentialGame.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tracer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TransientParticle.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Utilities.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/World.cs" beforeDir="false" />
-    </list>
+    <list default="true" id="d0d16ef0-7f72-401f-9aef-02ee07ca0eb9" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,7 +221,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10148000" />
+    <option name="totallyTimeSpent" value="10386000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
