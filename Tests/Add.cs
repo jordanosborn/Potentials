@@ -7,6 +7,7 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
+            
         }
 
         [TestCase(8, 9, 20)]
