@@ -1,4 +1,7 @@
 # Potentials
+
+[![Build Status](https://travis-ci.com/jordanosborn/Potentials.svg?branch=master)](https://travis-ci.com/jordanosborn/Potentials)
+
 Particle simulator
 ### To Run
     dotnet run
