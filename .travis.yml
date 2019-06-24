@@ -11,11 +11,11 @@ install:
   # See: https://github.com/MonoGame/MonoGame/issues/5879
   - chmod +x monogame-sdk.run
   - sudo ./monogame-sdk.run --noexec --keep --target ./monogame
-  - sudo chmod 777 ./monogame/postinstall.sh
-  - cd monogame
-  - sudo chmod +x postinstall.sh
-  - sudo ./postinstall.sh
-  - cd ..
+#   - sudo chmod 777 ./monogame/postinstall.sh
+#   - cd monogame
+#   - sudo chmod +x postinstall.sh
+#   - sudo ./postinstall.sh
+#   - cd ..
 script:
   - dotnet restore
   - dotnet test
