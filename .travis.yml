@@ -1,6 +1,6 @@
 dist: xenial
 language: csharp
-mono: none
+#mono: none
 dotnet: 2.2
 solution: Potential.sln
 script:
