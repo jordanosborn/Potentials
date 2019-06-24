@@ -3,6 +3,20 @@ language: csharp
 #mono: none
 dotnet: 2.2
 solution: Potential.sln
+install:
+  # MonoGame 3.7
+  - sudo apt-get install gtk-sharp3
+  - wget https://github.com/MonoGame/MonoGame/releases/download/v3.7.1/monogame-sdk.run
+  # Extract contents and overwrite postinstall.sh to not prompt for input
+  # See: https://github.com/MonoGame/MonoGame/issues/5879
+  - chmod +x monogame-sdk.run
+  - sudo ./monogame-sdk.run --noexec --keep --target ./monogame
+  - sudo chmod 777 ./monogame/postinstall.sh
+  - cp Build/postinstall.sh ./monogame
+  - cd monogame
+  - sudo chmod +x postinstall.sh
+  - sudo ./postinstall.sh
+  - cd ..
 script:
   - dotnet restore
   - dotnet test
