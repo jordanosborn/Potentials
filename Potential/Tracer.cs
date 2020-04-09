@@ -102,9 +102,17 @@ namespace Potential
                     theta = (float) Math.Acos(cosTheta);
                 }
 
-                batch.Draw(ParticleTexture, new Vector2(position.X, position.Y),
-                    origin: Origin, scale: new Vector2(Scale.X, Scale.Y), rotation: orientation.Y < 0 ? -theta : theta,
-                    color: ParticleColor);
+                batch.Draw(
+                    ParticleTexture,
+                    sourceRectangle: null,
+                    position: new Vector2(position.X, position.Y),
+                    origin: Origin,
+                    scale: new Vector2(Scale.X, Scale.Y),
+                    rotation: orientation.Y < 0 ? -theta : theta,
+                    color: ParticleColor,
+                    layerDepth: 0,
+                    effects: new SpriteEffects()
+                );
             }
 
             return ErrorCodes.SUCCESS;

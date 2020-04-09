@@ -104,10 +104,18 @@ namespace Potential
             GraphicsDevice.Clear(ColorBG);
             spriteBatch.Begin();
             var bg = Textures["background"];
-            spriteBatch.Draw(bg, Vector2.Zero,
-                origin: Vector2.Zero, color: Color.White,
+            spriteBatch.Draw(
+                texture: bg,
+                position: Vector2.Zero,
+                sourceRectangle: null,
+                origin: Vector2.Zero,
+                color: Color.White,
                 scale: new Vector2(Window.ClientBounds.Width / (float) bg.Width,
-                    Window.ClientBounds.Height / (float) bg.Height)
+                    Window.ClientBounds.Height / (float) bg.Height
+                ),
+                rotation: 0.0f,
+                effects: SpriteEffects.None,
+                layerDepth: 0
             );
             GameWorld.Draw(spriteBatch);
             State.Draw(spriteBatch, GameWorld, Window);

@@ -23,7 +23,7 @@ namespace Potential
 
         public ErrorCodes Update(GameTime time, World world = null, GameState state = null, object args = null)
         {
-            world = world ?? this;
+            world ??= this;
             foreach (var p in Particles) p.Update(time, world, state);
 
             foreach (var f in IntrinsicFields) f.Update(time, world, state);
@@ -39,9 +39,11 @@ namespace Potential
 
         public object Clone()
         {
-            var world = new World(Textures);
-            world.Particles = (List<Particle>) Particles.Clone();
-            world.IntrinsicFields = (List<IField>) IntrinsicFields.Clone();
+            var world = new World(Textures)
+            {
+                Particles = (List<Particle>)Particles.Clone(),
+                IntrinsicFields = (List<IField>)IntrinsicFields.Clone()
+            };
             return world;
         }
 

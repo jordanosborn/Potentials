@@ -151,7 +151,17 @@ namespace Potential
         {
             if (Texture == null)
                 return ErrorCodes.FAILURE;
-            batch.Draw(Texture, new Vector2(Position.X, Position.Y), origin: Origin, rotation: Rotation, scale: Scale, color: Color.White);
+            batch.Draw(
+                texture: Texture,
+                position: new Vector2(Position.X, Position.Y),
+                sourceRectangle: null,
+                origin: Origin,
+                rotation: Rotation,
+                scale: Scale,
+                color: Color.White,
+                effects: new SpriteEffects(),
+                layerDepth: 0
+            );
             if (ParticleTracer != null && GameState.GetState().Flags.Contains(GameState.UiFlags.TRACERS_ON))
                 ParticleTracer.Draw(batch);
             return ErrorCodes.SUCCESS;

@@ -130,11 +130,29 @@ namespace Potential
                 var theta = (float) Math.Acos(Vector2.Dot(new Vector2(x, y), Vector2.UnitX));
 
                 const float scale = 20.0f;
-                batch.Draw(textureTail, position, origin: originTail, color: ColorFg,
-                    rotation: y < 0 ? -theta : theta, scale: new Vector2(arrowLength, scale / textureTail.Height));
+                batch.Draw(
+                    textureTail,
+                    position,
+                    origin: originTail,
+                    sourceRectangle: null,
+                    color: ColorFg,
+                    rotation: y < 0 ? -theta : theta,
+                    scale: new Vector2(arrowLength, scale / textureTail.Height),
+                    effects: SpriteEffects.None,
+                    layerDepth: 0
+                );
                 if (Math.Abs(velMagnitude) > float.Epsilon)
-                    batch.Draw(texture, new Vector2(mouseX, mouseY), origin: origin, color: ColorFg,
-                        rotation: y < 0 ? -theta : theta, scale: new Vector2(scale / texture.Width, scale / texture.Height));
+                    batch.Draw(
+                        texture,
+                        new Vector2(mouseX, mouseY),
+                        origin: origin,
+                        sourceRectangle: null,
+                        color: ColorFg,
+                        rotation: y < 0 ? -theta : theta,
+                        scale: new Vector2(scale / texture.Width, scale / texture.Height),
+                        effects: SpriteEffects.None,
+                        layerDepth: 0
+                    );
             }
 
             return ErrorCodes.SUCCESS;
