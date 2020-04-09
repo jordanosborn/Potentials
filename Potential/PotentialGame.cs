@@ -23,9 +23,11 @@ namespace Potential
 
         public PotentialGame()
         {
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = DefaultSize.Item1;
-            graphics.PreferredBackBufferHeight = DefaultSize.Item2;
+            graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = DefaultSize.Item1,
+                PreferredBackBufferHeight = DefaultSize.Item2
+            };
             graphics.ApplyChanges();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -109,7 +111,7 @@ namespace Potential
                 position: Vector2.Zero,
                 sourceRectangle: null,
                 origin: Vector2.Zero,
-                color: Color.White,
+                color: ColorFG,
                 scale: new Vector2(Window.ClientBounds.Width / (float) bg.Width,
                     Window.ClientBounds.Height / (float) bg.Height
                 ),

@@ -55,12 +55,14 @@ namespace Potential
 
         private void DrawParamUi(SpriteBatch batch, Vector2 location)
         {
-            var textUi = new List<string>();
-            textUi.Add($"Mass: {ParamValues.Mass}");
-            textUi.Add($"Charge: {ParamValues.Charge}");
-            textUi.Add($"Radius: {ParamValues.Radius}");
-            textUi.Add($"Position: {ParamValues.Position}");
-            textUi.Add($"Velocity: {ParamValues.Velocity}");
+            var textUi = new List<string>
+            {
+                $"Mass: {ParamValues.Mass}",
+                $"Charge: {ParamValues.Charge}",
+                $"Radius: {ParamValues.Radius}",
+                $"Position: {ParamValues.Position}",
+                $"Velocity: {ParamValues.Velocity}"
+            };
             string filterText;
             switch (ParamSelected)
             {
@@ -92,8 +94,10 @@ namespace Potential
 
         public ErrorCodes Draw(SpriteBatch batch, World world, GameWindow window = null)
         {
-            var TextUI = new List<string>();
-            TextUI.Add($"Particles: {world.Particles.Count()}");
+            var TextUI = new List<string>
+            {
+                $"Particles: {world.Particles.Count()}"
+            };
             if (Flags.Contains(UiFlags.FPS_ON)) TextUI.Add($"{Math.Round(Fps.Framerate, 0)}FPS");
             if (Flags.Contains(UiFlags.MOUSE_LOCATION_ON))
             {

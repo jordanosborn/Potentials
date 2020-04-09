@@ -262,9 +262,11 @@ namespace Potential
 
         public object Clone()
         {
-            var p = new Particle(ID, Texture, Position, Velocity, Radius, Mass, Charge, Energy, Rotation, AngularVelocity, IsFixed);
-            p.ParticleTracer = ParticleTracer;
-            p.InterParticleForces = InterParticleForces;
+            var p = new Particle(ID, Texture, Position, Velocity, Radius, Mass, Charge, Energy, Rotation, AngularVelocity, IsFixed)
+            {
+                ParticleTracer = ParticleTracer,
+                InterParticleForces = InterParticleForces
+            };
             return p;
         }
     }
