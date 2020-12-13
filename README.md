@@ -18,8 +18,9 @@ Particle simulator
     J - Edit Spin Parameter
     I - Edit Particle Type
     T - Toggle Particle Tracer
+    , - To Decrement Selected Parameter
+    . - To Increment Selected Parameter
     CLICK, DRAG AND RELEASE - Create a particle at position of initial click and with velocity in the mouse drag direction.
-    - 0-9 . - Edit Parameter Value
 ### TODO:
 1. Improve integration method
 1. Transient particles decay products

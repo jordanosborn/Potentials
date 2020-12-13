@@ -10,9 +10,9 @@ namespace Potential
     public class PotentialGame : Game
     {
         private readonly Color ColorBG = Color.Black;
-        private readonly (int, int) DefaultSize = (600, 600);
+        private readonly (int, int) DefaultSize = (800, 800);
         private readonly GraphicsDeviceManager graphics;
-        private readonly (int, int) MinSize = (600, 600);
+        private readonly (int, int) MinSize = (800, 800);
         private readonly Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
         private Color ColorFG = Color.White;
         private MouseCursor Cursor;
@@ -26,7 +26,8 @@ namespace Potential
             graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferWidth = DefaultSize.Item1,
-                PreferredBackBufferHeight = DefaultSize.Item2
+                PreferredBackBufferHeight = DefaultSize.Item2,
+		PreferMultiSampling = false
             };
             graphics.ApplyChanges();
             Content.RootDirectory = "Content";

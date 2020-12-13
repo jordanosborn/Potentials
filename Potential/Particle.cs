@@ -41,8 +41,8 @@ namespace Potential
         public float Mass { get; set; } = 100;
         public float Charge { get; set; } = 0;
         public float Radius { get; set; } = 20;
-        public Vector3 Position { get; set; } = Vector3.Zero;
-        public Vector3 Velocity { get; set; } = Vector3.Zero;
+        public Vector3 Position = Vector3.Zero;
+        public Vector3 Velocity  = Vector3.Zero;
         public void Update(float? mass, float? charge = null, float? radius = null, Vector3? position = null, Vector3? velocity = null)
         {
             Mass = mass ?? Mass;
